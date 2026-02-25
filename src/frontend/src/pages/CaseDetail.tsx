@@ -17,6 +17,7 @@ import CaseOverview from '../components/CaseOverview';
 import ReadingTab from '../components/ReadingTab';
 import EligibilityTab from '../components/EligibilityTab';
 import ChecklistTab from '../components/ChecklistTab';
+import HistoryTab from '../components/HistoryTab';
 import type { Verdict } from '../types/enums';
 import { patchJson } from '../services/api-client';
 
@@ -219,9 +220,7 @@ export default function CaseDetail() {
         )}
         {activeTab === 'history' && (
           <div data-testid="tab-content-history">
-            {caseData.latest_events && caseData.latest_events.length > 0
-              ? `イベント ${caseData.latest_events.length} 件（実装予定）`
-              : 'イベント履歴はまだありません。'}
+            <HistoryTab events={caseData.latest_events ?? []} />
           </div>
         )}
       </div>

@@ -1,0 +1,36 @@
+# ============================================================================
+# 入札ラクダAI — cron schedule (SSOT-5 §2-3, TASK-48)
+#
+# Install: crontab < src/backend/crontab.example
+# Or:      crontab -e  and paste the entries below
+#
+# Log output goes to logs/ directory (APP_LOG_DIR).
+# PROJ_DIR must be set to the repository root.
+# ============================================================================
+
+PROJ_DIR=/path/to/nyusatsu
+BACKEND_DIR=${PROJ_DIR}/src/backend
+VENV=${BACKEND_DIR}/.venv/bin/python
+
+# ---- Daily batch pipeline (SSOT-5 §2-3) ----
+# Order matters: od_import → case_fetch → detail_scrape → cascade
+
+# 06:00 — OpenData import (F-005)
+0 6 * * *   cd ${BACKEND_DIR} && ${VENV} -m app.scripts.run_od_import >> ${BACKEND_DIR}/logs/od_import.log 2>&1
+
+# 06:30 — Case fetch from sources (F-001)
+30 6 * * *  cd ${BACKEND_DIR} && ${VENV} -m app.scripts.run_case_fetch >> ${BACKEND_DIR}/logs/case_fetch.log 2>&1
+
+# 07:00 — Detail page scraping (F-005)
+0 7 * * *   cd ${BACKEND_DIR} && ${VENV} -m app.scripts.run_detail_scrape >> ${BACKEND_DIR}/logs/detail_scrape.log 2>&1
+
+# 07:30 — Cascade pipeline: reading → judging → checklist (F-002/F-003/F-004)
+30 7 * * *  cd ${BACKEND_DIR} && ${VENV} -m app.scripts.run_cascade >> ${BACKEND_DIR}/logs/cascade.log 2>&1
+
+# ---- Monitoring ----
+
+# Every 5 min — Stuck case detector
+*/5 * * * * cd ${BACKEND_DIR} && ${VENV} -m app.scripts.run_stuck_detector >> ${BACKEND_DIR}/logs/stuck_detector.log 2>&1
+
+# 08:00 daily — Health check (exit 1 on HIGH alert)
+0 8 * * *   cd ${BACKEND_DIR} && ${VENV} -m app.scripts.health_check >> ${BACKEND_DIR}/logs/health_check.log 2>&1

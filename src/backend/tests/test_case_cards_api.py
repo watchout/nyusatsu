@@ -97,3 +97,29 @@ class TestGetAllCards:
         assert resp.status_code == 200
         data = resp.json()["data"]
         assert data == []
+
+
+@pytest.mark.anyio
+class TestMarkCardReviewed:
+    """POST /api/v1/case-cards/{card_id}/actions/mark-reviewed."""
+
+    async def test_mark_reviewed_success(self, client: AsyncClient, db: AsyncSession):
+        """Sets reviewed_at and reviewed_by on the card."""
+        case = await _create_case(db, "mark-review-1")
+        card = await _create_card(db, case, version=1, is_current=True)
+
+        resp = await client.post(
+            f"/api/v1/case-cards/{card.id}/actions/mark-reviewed",
+        )
+        assert resp.status_code == 200
+        data = resp.json()["data"]
+        assert data["reviewed_at"] is not None
+        assert data["reviewed_by"] == "kaneko"
+
+    async def test_mark_reviewed_not_found(self, client: AsyncClient):
+        """Non-existent card_id → 404."""
+        fake_id = uuid.uuid4()
+        resp = await client.post(
+            f"/api/v1/case-cards/{fake_id}/actions/mark-reviewed",
+        )
+        assert resp.status_code == 404

@@ -14,6 +14,7 @@ import { isProcessingStage } from '../types/enums';
 import type { Case } from '../types/case';
 import StageBadge from '../components/StageBadge';
 import CaseOverview from '../components/CaseOverview';
+import ReadingTab from '../components/ReadingTab';
 
 type TabId = 'overview' | 'reading' | 'eligibility' | 'checklist' | 'history';
 
@@ -146,9 +147,14 @@ export default function CaseDetail() {
         )}
         {activeTab === 'reading' && (
           <div data-testid="tab-content-reading">
-            {caseData.card
-              ? 'AI読解結果（実装予定）'
-              : 'この案件はまだ AI 読解されていません。'}
+            {caseData.card ? (
+              <ReadingTab
+                card={caseData.card}
+                onMarkReviewed={() => handleAction('mark_reviewed')}
+              />
+            ) : (
+              'この案件はまだ AI 読解されていません。'
+            )}
           </div>
         )}
         {activeTab === 'eligibility' && (

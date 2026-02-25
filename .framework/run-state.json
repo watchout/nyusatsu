@@ -1,12 +1,61 @@
 {
-  "currentTaskId": "TASK-01",
+  "currentTaskId": "TASK-37",
   "startedAt": "2026-02-20T00:30:00.000Z",
   "tasks": [
     {
       "taskId": "TASK-01",
       "title": "バックエンド scaffold (FastAPI + uv)",
-      "status": "in_progress",
-      "startedAt": "2026-02-20T00:30:00.000Z"
+      "status": "completed",
+      "startedAt": "2026-02-20T00:30:00.000Z",
+      "completedAt": "2026-02-20T06:00:00.000Z"
+    },
+    {
+      "taskId": "TASK-02",
+      "title": "フロントエンド scaffold (React + bun)",
+      "status": "completed",
+      "startedAt": "2026-02-20T06:00:00.000Z",
+      "completedAt": "2026-02-20T07:00:00.000Z"
+    },
+    {
+      "taskId": "TASK-03",
+      "title": "Docker + PostgreSQL + .env",
+      "status": "completed",
+      "startedAt": "2026-02-20T07:00:00.000Z",
+      "completedAt": "2026-02-20T08:00:00.000Z"
+    },
+    {
+      "taskId": "TASK-04-08",
+      "title": "Phase 1: データレイヤー (テーブル + モデル + CRUD)",
+      "status": "completed",
+      "completedAt": "2026-02-21T00:00:00.000Z"
+    },
+    {
+      "taskId": "TASK-09-15",
+      "title": "Phase 2: 共有インフラ (エンベロープ・Event・バッチ等)",
+      "status": "completed",
+      "completedAt": "2026-02-22T00:00:00.000Z"
+    },
+    {
+      "taskId": "TASK-16-22",
+      "title": "Phase 3: F-005 & F-001 実装 + 案件アクション",
+      "status": "completed",
+      "completedAt": "2026-02-23T00:00:00.000Z",
+      "note": "233 tests PASS"
+    },
+    {
+      "taskId": "TASK-23-32",
+      "title": "Phase 4: F-002/F-003/F-004 + Cascade + API先行",
+      "status": "completed",
+      "completedAt": "2026-02-24T00:00:00.000Z",
+      "note": "437 tests PASS, tag: v0.1-phase4-complete"
+    },
+    {
+      "taskId": "TASK-33-38",
+      "title": "Phase 5: API レイヤー完成",
+      "status": "completed",
+      "startedAt": "2026-02-25T00:00:00.000Z",
+      "completedAt": "2026-02-25T12:00:00.000Z",
+      "note": "506 tests PASS (+69). 28 endpoints implemented per SSOT-3."
     }
   ]
 }

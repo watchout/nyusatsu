@@ -4,6 +4,7 @@ import structlog
 from fastapi import FastAPI
 
 from app.api.actions import router as actions_router
+from app.api.analytics import router as analytics_router
 from app.api.batch import router as batch_router
 from app.api.case_cards import router as case_cards_router
 from app.api.cases import router as cases_router
@@ -46,6 +47,7 @@ def create_app() -> FastAPI:
     app.include_router(events_router)
     app.include_router(batch_router)
     app.include_router(company_profile_router)
+    app.include_router(analytics_router)
 
     return app
 

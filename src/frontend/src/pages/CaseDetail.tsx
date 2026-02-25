@@ -16,7 +16,9 @@ import StageBadge from '../components/StageBadge';
 import CaseOverview from '../components/CaseOverview';
 import ReadingTab from '../components/ReadingTab';
 import EligibilityTab from '../components/EligibilityTab';
+import ChecklistTab from '../components/ChecklistTab';
 import type { Verdict } from '../types/enums';
+import { patchJson } from '../services/api-client';
 
 type TabId = 'overview' | 'reading' | 'eligibility' | 'checklist' | 'history';
 
@@ -99,6 +101,21 @@ export default function CaseDetail() {
       }
     },
     [id, loadCase],
+  );
+
+  const handleToggleItem = useCallback(
+    async (itemId: string, checked: boolean) => {
+      if (!id || !caseData?.checklist) return;
+      try {
+        await patchJson(`/checklists/${caseData.checklist.id}/items/${itemId}`, {
+          is_checked: checked,
+        });
+        await loadCase();
+      } catch (err) {
+        console.error('Toggle failed:', err);
+      }
+    },
+    [id, caseData?.checklist, loadCase],
   );
 
   if (loading && !caseData) {
@@ -190,9 +207,14 @@ export default function CaseDetail() {
         )}
         {activeTab === 'checklist' && (
           <div data-testid="tab-content-checklist">
-            {caseData.checklist
-              ? 'チェックリスト（実装予定）'
-              : '参加可能と判定されると、チェックリストが自動生成されます。'}
+            {caseData.checklist ? (
+              <ChecklistTab
+                checklist={caseData.checklist}
+                onToggleItem={handleToggleItem}
+              />
+            ) : (
+              '参加可能と判定されると、チェックリストが自動生成されます。'
+            )}
           </div>
         )}
         {activeTab === 'history' && (

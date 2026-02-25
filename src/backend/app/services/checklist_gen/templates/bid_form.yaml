@@ -1,0 +1,31 @@
+# 入札書テンプレートガイド
+# F-004 §3-C-2: template_type = "agency_form"
+#
+# 入札書は発注機関ごとに指定書式が異なるため、
+# 案件の公告文から書式ダウンロードURLを取得するのが原則。
+# URLが取れない場合は汎用テンプレートで代用。
+
+name: "入札書"
+template_type: "agency_form"
+description: >
+  発注機関が指定する入札書様式。
+  機関が定める形式以外は無効になる場合がある。
+  必ず公告文に添付されたひな形を使用すること。
+
+fields:
+  - name: "入札金額"
+    required: true
+    notes: "税抜き金額を記入。1円未満切り捨て"
+  - name: "入札者名"
+    required: true
+    notes: "正式名称（登記名）を記入"
+  - name: "代表者名"
+    required: true
+    notes: "代理入札の場合は委任状に記載の代理人名"
+  - name: "日付"
+    required: true
+    notes: "入札書提出日を記入"
+
+warnings:
+  - "金額の訂正は認められない場合が多い"
+  - "押印が必要な場合あり（機関による）"

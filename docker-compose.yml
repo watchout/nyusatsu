@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    container_name: nyusatsu-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: nyusatsu
+      POSTGRES_PASSWORD: nyusatsu_dev
+      POSTGRES_DB: nyusatsu
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nyusatsu -d nyusatsu"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

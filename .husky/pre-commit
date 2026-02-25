@@ -1,0 +1,7 @@
+#!/bin/sh
+# === Pre-Code Gate (framework) ===
+PROTECTED_STAGED=$(git diff --cached --name-only | grep -E '^(src|app|server|lib|components|pages|composables|utils|stores|plugins)/')
+if [ -n "$PROTECTED_STAGED" ] && command -v framework >/dev/null 2>&1; then
+  framework gate check || { echo "[Pre-Code Gate] COMMIT BLOCKED"; exit 1; }
+fi
+# === End Pre-Code Gate (framework) ===

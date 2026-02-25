@@ -1,0 +1,12 @@
+{
+  "currentTaskId": "TASK-01",
+  "startedAt": "2026-02-20T00:30:00.000Z",
+  "tasks": [
+    {
+      "taskId": "TASK-01",
+      "title": "バックエンド scaffold (FastAPI + uv)",
+      "status": "in_progress",
+      "startedAt": "2026-02-20T00:30:00.000Z"
+    }
+  ]
+}

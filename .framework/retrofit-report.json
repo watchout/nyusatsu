@@ -1,0 +1,474 @@
+{
+  "projectDir": "/Users/kaneko/nyusatsu",
+  "projectName": "nyusatsu",
+  "scannedAt": "2026-02-17T00:43:14.706Z",
+  "directory": {
+    "hasSrc": true,
+    "hasDocs": true,
+    "hasTests": false,
+    "hasPublic": false,
+    "hasFramework": true,
+    "hasClaudeMd": true,
+    "hasPackageJson": false,
+    "topLevelDirs": [
+      "docs",
+      "src"
+    ],
+    "srcSubdirs": []
+  },
+  "techStack": [],
+  "fileStats": {
+    "totalFiles": 50,
+    "totalLines": 11908,
+    "byExtension": {
+      ".json": 1,
+      ".md": 49
+    }
+  },
+  "existingDocs": [
+    {
+      "path": "docs/design/core/SSOT-2_UI_STATE.md",
+      "name": "SSOT-2_UI_STATE.md",
+      "sizeBytes": 0,
+      "category": "core"
+    },
+    {
+      "path": "docs/design/core/SSOT-3_API_CONTRACT.md",
+      "name": "SSOT-3_API_CONTRACT.md",
+      "sizeBytes": 0,
+      "category": "core"
+    },
+    {
+      "path": "docs/design/core/SSOT-4_DATA_MODEL.md",
+      "name": "SSOT-4_DATA_MODEL.md",
+      "sizeBytes": 0,
+      "category": "core"
+    },
+    {
+      "path": "docs/design/core/SSOT-5_CROSS_CUTTING.md",
+      "name": "SSOT-5_CROSS_CUTTING.md",
+      "sizeBytes": 0,
+      "category": "core"
+    },
+    {
+      "path": "docs/idea/COMPETITOR_ANALYSIS.md",
+      "name": "COMPETITOR_ANALYSIS.md",
+      "sizeBytes": 21554,
+      "category": "idea"
+    },
+    {
+      "path": "docs/idea/IDEA_CANVAS.md",
+      "name": "IDEA_CANVAS.md",
+      "sizeBytes": 13299,
+      "category": "idea"
+    },
+    {
+      "path": "docs/idea/USER_PERSONA.md",
+      "name": "USER_PERSONA.md",
+      "sizeBytes": 20330,
+      "category": "idea"
+    },
+    {
+      "path": "docs/idea/VALUE_PROPOSITION.md",
+      "name": "VALUE_PROPOSITION.md",
+      "sizeBytes": 17727,
+      "category": "idea"
+    },
+    {
+      "path": "docs/management/PROJECT_PLAN.md",
+      "name": "PROJECT_PLAN.md",
+      "sizeBytes": 5987,
+      "category": "management"
+    },
+    {
+      "path": "docs/notes/hotplus/KNOWLEDGE_DIGEST.md",
+      "name": "KNOWLEDGE_DIGEST.md",
+      "sizeBytes": 6525,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP1_案件検索.md",
+      "name": "STEP1_案件検索.md",
+      "sizeBytes": 2299,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP2_公告確認.md",
+      "name": "STEP2_公告確認.md",
+      "sizeBytes": 5487,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP3_仕様書確認.md",
+      "name": "STEP3_仕様書確認.md",
+      "sizeBytes": 3671,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP4_入札参加.md",
+      "name": "STEP4_入札参加.md",
+      "sizeBytes": 2275,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP5_結果確認.md",
+      "name": "STEP5_結果確認.md",
+      "sizeBytes": 2120,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP6_業務履行.md",
+      "name": "STEP6_業務履行.md",
+      "sizeBytes": 2575,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/notes/hotplus/STEP7_同等品申請.md",
+      "name": "STEP7_同等品申請.md",
+      "sizeBytes": 4636,
+      "category": "hotplus"
+    },
+    {
+      "path": "docs/requirements/SSOT-0_PRD.md",
+      "name": "SSOT-0_PRD.md",
+      "sizeBytes": 20899,
+      "category": "requirements"
+    },
+    {
+      "path": "docs/requirements/SSOT-1_FEATURE_CATALOG.md",
+      "name": "SSOT-1_FEATURE_CATALOG.md",
+      "sizeBytes": 13067,
+      "category": "requirements"
+    },
+    {
+      "path": "docs/standards/CHANGES.md",
+      "name": "CHANGES.md",
+      "sizeBytes": 6267,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/CODING_STANDARDS.md",
+      "name": "CODING_STANDARDS.md",
+      "sizeBytes": 10372,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/DEPLOYMENT.md",
+      "name": "DEPLOYMENT.md",
+      "sizeBytes": 9603,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/DEV_ENVIRONMENT.md",
+      "name": "DEV_ENVIRONMENT.md",
+      "sizeBytes": 7266,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/ENVIRONMENTS.md",
+      "name": "ENVIRONMENTS.md",
+      "sizeBytes": 9970,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/GIT_WORKFLOW.md",
+      "name": "GIT_WORKFLOW.md",
+      "sizeBytes": 8838,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/INCIDENT_RESPONSE.md",
+      "name": "INCIDENT_RESPONSE.md",
+      "sizeBytes": 9306,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/MONITORING.md",
+      "name": "MONITORING.md",
+      "sizeBytes": 10554,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/PROJECT_PLAN.md",
+      "name": "PROJECT_PLAN.md",
+      "sizeBytes": 9669,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/RISKS.md",
+      "name": "RISKS.md",
+      "sizeBytes": 7905,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/SECURITY_STRIPE.md",
+      "name": "SECURITY_STRIPE.md",
+      "sizeBytes": 13419,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/TECH_STACK.md",
+      "name": "TECH_STACK.md",
+      "sizeBytes": 8370,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/TESTING_STANDARDS.md",
+      "name": "TESTING_STANDARDS.md",
+      "sizeBytes": 11757,
+      "category": "standards"
+    },
+    {
+      "path": "docs/standards/growth/GROWTH_STRATEGY.md",
+      "name": "GROWTH_STRATEGY.md",
+      "sizeBytes": 9914,
+      "category": "growth"
+    },
+    {
+      "path": "docs/standards/growth/METRICS_DEFINITION.md",
+      "name": "METRICS_DEFINITION.md",
+      "sizeBytes": 8775,
+      "category": "growth"
+    },
+    {
+      "path": "docs/standards/idea/COMPETITOR_ANALYSIS.md",
+      "name": "COMPETITOR_ANALYSIS.md",
+      "sizeBytes": 6104,
+      "category": "idea"
+    },
+    {
+      "path": "docs/standards/idea/IDEA_CANVAS.md",
+      "name": "IDEA_CANVAS.md",
+      "sizeBytes": 5846,
+      "category": "idea"
+    },
+    {
+      "path": "docs/standards/idea/USER_PERSONA.md",
+      "name": "USER_PERSONA.md",
+      "sizeBytes": 6509,
+      "category": "idea"
+    },
+    {
+      "path": "docs/standards/idea/VALUE_PROPOSITION.md",
+      "name": "VALUE_PROPOSITION.md",
+      "sizeBytes": 9379,
+      "category": "idea"
+    },
+    {
+      "path": "docs/standards/marketing/EMAIL_SEQUENCE.md",
+      "name": "EMAIL_SEQUENCE.md",
+      "sizeBytes": 10020,
+      "category": "marketing"
+    },
+    {
+      "path": "docs/standards/marketing/LAUNCH_PLAN.md",
+      "name": "LAUNCH_PLAN.md",
+      "sizeBytes": 9778,
+      "category": "marketing"
+    },
+    {
+      "path": "docs/standards/marketing/LP_SPEC.md",
+      "name": "LP_SPEC.md",
+      "sizeBytes": 10323,
+      "category": "marketing"
+    },
+    {
+      "path": "docs/standards/marketing/PRICING_STRATEGY.md",
+      "name": "PRICING_STRATEGY.md",
+      "sizeBytes": 8185,
+      "category": "marketing"
+    },
+    {
+      "path": "docs/standards/marketing/SNS_STRATEGY.md",
+      "name": "SNS_STRATEGY.md",
+      "sizeBytes": 9140,
+      "category": "marketing"
+    },
+    {
+      "path": "CLAUDE.md",
+      "name": "CLAUDE.md",
+      "sizeBytes": 11901,
+      "category": "root"
+    },
+    {
+      "path": "Differentiation.md",
+      "name": "Differentiation.md",
+      "sizeBytes": 2330,
+      "category": "root"
+    },
+    {
+      "path": "Nyusatsu_RakudaAI_DeepResearch.md",
+      "name": "Nyusatsu_RakudaAI_DeepResearch.md",
+      "sizeBytes": 11994,
+      "category": "root"
+    },
+    {
+      "path": "PainBook.md",
+      "name": "PainBook.md",
+      "sizeBytes": 1872,
+      "category": "root"
+    },
+    {
+      "path": "PersonaStories.md",
+      "name": "PersonaStories.md",
+      "sizeBytes": 1547,
+      "category": "root"
+    },
+    {
+      "path": "README.md",
+      "name": "README.md",
+      "sizeBytes": 3861,
+      "category": "root"
+    }
+  ],
+  "gaps": [
+    {
+      "ssoId": "SSOT-0",
+      "name": "PRD",
+      "path": "docs/requirements/SSOT-0_PRD.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "SSOT-1",
+      "name": "Feature Catalog",
+      "path": "docs/requirements/SSOT-1_FEATURE_CATALOG.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "SSOT-2",
+      "name": "UI/State",
+      "path": "docs/design/core/SSOT-2_UI_STATE.md",
+      "status": "partial",
+      "recommendation": "Stub only: Flesh out UI/State with actual content"
+    },
+    {
+      "ssoId": "SSOT-3",
+      "name": "API Contract",
+      "path": "docs/design/core/SSOT-3_API_CONTRACT.md",
+      "status": "partial",
+      "recommendation": "Stub only: Flesh out API Contract with actual content"
+    },
+    {
+      "ssoId": "SSOT-4",
+      "name": "Data Model",
+      "path": "docs/design/core/SSOT-4_DATA_MODEL.md",
+      "status": "partial",
+      "recommendation": "Stub only: Flesh out Data Model with actual content"
+    },
+    {
+      "ssoId": "SSOT-5",
+      "name": "Cross-Cutting",
+      "path": "docs/design/core/SSOT-5_CROSS_CUTTING.md",
+      "status": "partial",
+      "recommendation": "Stub only: Flesh out Cross-Cutting with actual content"
+    },
+    {
+      "ssoId": "STD-TECH",
+      "name": "Tech Stack",
+      "path": "docs/standards/TECH_STACK.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "STD-CODE",
+      "name": "Coding Standards",
+      "path": "docs/standards/CODING_STANDARDS.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "STD-GIT",
+      "name": "Git Workflow",
+      "path": "docs/standards/GIT_WORKFLOW.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "STD-TEST",
+      "name": "Testing Standards",
+      "path": "docs/standards/TESTING_STANDARDS.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "IDEA",
+      "name": "Idea Canvas",
+      "path": "docs/idea/IDEA_CANVAS.md",
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
+    },
+    {
+      "ssoId": "OPS-ENV",
+      "name": "Environments",
+      "path": "docs/operations/ENVIRONMENTS.md",
+      "status": "missing",
+      "recommendation": "Optional: Generate Environments when ready"
+    },
+    {
+      "ssoId": "OPS-DEPLOY",
+      "name": "Deployment",
+      "path": "docs/operations/DEPLOYMENT.md",
+      "status": "missing",
+      "recommendation": "Optional: Generate Deployment when ready"
+    }
+  ],
+  "readiness": {
+    "score": 30,
+    "maxScore": 89,
+    "details": [
+      {
+        "name": "package.json exists",
+        "passed": false,
+        "points": 10,
+        "detail": "No package.json found"
+      },
+      {
+        "name": "src/ directory exists",
+        "passed": true,
+        "points": 10
+      },
+      {
+        "name": "Framework detected",
+        "passed": false,
+        "points": 10,
+        "detail": "No framework detected"
+      },
+      {
+        "name": "TypeScript configured",
+        "passed": false,
+        "points": 10,
+        "detail": "TypeScript not detected"
+      },
+      {
+        "name": "Testing framework configured",
+        "passed": false,
+        "points": 10,
+        "detail": "No testing framework detected"
+      },
+      {
+        "name": "docs/ directory exists",
+        "passed": true,
+        "points": 10
+      },
+      {
+        "name": "Required SSOT documents",
+        "passed": false,
+        "points": 9,
+        "detail": "3/7 required SSOTs exist"
+      },
+      {
+        "name": "Not already managed",
+        "passed": false,
+        "points": 10,
+        "detail": "Already has .framework/ directory"
+      },
+      {
+        "name": "CLAUDE.md exists",
+        "passed": true,
+        "points": 10
+      }
+    ]
+  }
+}

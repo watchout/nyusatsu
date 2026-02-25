@@ -1,0 +1,24 @@
+{
+  "name": "nyusatsu-rakuda-ai",
+  "version": "0.1.0",
+  "description": "入札オペレーションOS — 案件探索→仕様書理解→応札準備を半自動化",
+  "profileType": "app",
+  "createdAt": "2026-02-17T00:43:14.710Z",
+  "updatedAt": "2026-02-17T00:43:14.710Z",
+  "phase": -1,
+  "status": "initialized",
+  "techStack": {
+    "framework": "fastapi",
+    "language": "python,typescript",
+    "ui": "react",
+    "testing": "pytest,vitest",
+    "hosting": "undecided",
+    "packageManager": "uv,bun"
+  },
+  "config": {
+    "aiProvider": "anthropic",
+    "aiModel": "claude-sonnet-4-20250514",
+    "autoCommit": false,
+    "escalationMode": "strict"
+  }
+}

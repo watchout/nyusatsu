@@ -1,0 +1,32 @@
+# 封筒テンプレートガイド
+# F-004 §3-C-2: template_type = "generic"
+#
+# 入札書の封筒は二重構造が原則。
+
+name: "封筒（内封筒＋外封筒の二重構造）"
+template_type: "generic"
+description: >
+  入札書を入れる封筒。内封筒（長3）に入札書を封入し、
+  外封筒に内封筒ごと入れる二重構造。
+  表面に入札番号・案件名を記入すること。
+
+structure:
+  inner_envelope:
+    size: "長3"
+    contents:
+      - "入札書"
+    seal: "糊付け＋封緘印（又はテープ＋割印）"
+  outer_envelope:
+    size: "角2以上"
+    contents:
+      - "内封筒"
+      - "その他提出書類"
+    labeling:
+      - "入札番号"
+      - "案件名称"
+      - "入札者名"
+    seal: "糊付け"
+
+warnings:
+  - "封筒表面の記載漏れは失格事由になりうる"
+  - "内封筒の封緘が不十分だと無効の恐れ"

@@ -1,0 +1,31 @@
+# 下見積もり書テンプレートガイド
+# F-004 §3-C-2: template_type = "generic"
+#
+# has_quote_requirement = true の案件で使用。
+# 入札書提出前に提出が必要（通常、入札締切の数日〜1週間前）。
+
+name: "下見積もり書"
+template_type: "generic"
+description: >
+  官公庁が予定価格の参考とするための見積書。
+  入札参加額より高い金額を記入して提出する。
+  入札書提出前の期限に注意が必要。
+
+fields:
+  - name: "見積金額"
+    required: true
+    notes: "入札参加額より高い金額を記入。税抜き"
+  - name: "品名・数量"
+    required: true
+    notes: "案件仕様書に記載の品名・数量をそのまま転記"
+  - name: "見積有効期限"
+    required: false
+    notes: "開札日から30日程度が一般的"
+  - name: "会社名・代表者名"
+    required: true
+    notes: "正式名称。押印が必要な場合あり"
+
+warnings:
+  - "入札書提出前に提出が必要（期限厳守）"
+  - "金額は入札参加額より高く記入すること"
+  - "未提出の場合、入札参加が認められない可能性あり"

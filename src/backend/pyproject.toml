@@ -1,0 +1,48 @@
+[project]
+name = "nyusatsu-backend"
+version = "0.1.0"
+description = "入札ラクダAI - Backend API"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "sqlalchemy[asyncio]>=2.0",
+    "asyncpg>=0.29",
+    "alembic>=1.13",
+    "httpx>=0.27",
+    "tenacity>=8.2",
+    "beautifulsoup4>=4.12",
+    "pdfplumber>=0.11",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.1",
+    "jpholiday>=0.1",
+    "structlog>=24.1",
+    "anthropic>=0.39",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=4.1",
+    "httpx>=0.27",
+    "ruff>=0.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

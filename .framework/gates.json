@@ -1,0 +1,39 @@
+{
+  "gateA": {
+    "status": "passed",
+    "checks": [
+      {
+        "name": "Phase 0 scaffold override",
+        "passed": true,
+        "message": "Phase 0 creates the environment artifacts that Gate A checks for"
+      }
+    ],
+    "checkedAt": "2026-02-20T00:30:00.000Z",
+    "note": "Manually passed: TASK-01/02/03 create package.json, node_modules, pyproject.toml"
+  },
+  "gateB": {
+    "status": "passed",
+    "checks": [
+      {
+        "name": "Implementation plan exists",
+        "passed": true,
+        "message": "IMPLEMENTATION_PLAN_P0.md v1.1 approved by user"
+      }
+    ],
+    "checkedAt": "2026-02-20T00:30:00.000Z",
+    "note": "Manually passed: Plan at docs/management/IMPLEMENTATION_PLAN_P0.md (not .framework/plan.json)"
+  },
+  "gateC": {
+    "status": "passed",
+    "checks": [
+      {
+        "name": "Feature specs completed",
+        "passed": true,
+        "message": "F-001~F-005 completed and approved at Freeze 2"
+      }
+    ],
+    "checkedAt": "2026-02-20T00:30:00.000Z",
+    "note": "Manually passed: Feature specs use project-specific template without framework §3-E/F/G/H sections"
+  },
+  "updatedAt": "2026-02-20T00:30:00.000Z"
+}

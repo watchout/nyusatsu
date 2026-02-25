@@ -190,3 +190,54 @@ class TestAddManualItem:
         assert new_item["is_checked"] is False
         # Progress recalculated
         assert data["progress"]["total"] == 4
+
+
+@pytest.mark.anyio
+class TestOptimisticLock:
+    """PATCH with expected_checklist_version — TASK-35."""
+
+    async def test_optimistic_lock_success(self, client: AsyncClient, db: AsyncSession):
+        """Matching version allows the update."""
+        case, cl = await _setup_checklist(db, "lock-ok-1")
+
+        resp = await client.patch(
+            f"/api/v1/checklists/{cl.id}/items/0",
+            json={"is_checked": True, "expected_checklist_version": cl.version},
+        )
+        assert resp.status_code == 200
+
+    async def test_optimistic_lock_mismatch_409(self, client: AsyncClient, db: AsyncSession):
+        """Mismatched version returns 409 CHECKLIST_VERSION_MISMATCH."""
+        case, cl = await _setup_checklist(db, "lock-fail-1")
+
+        resp = await client.patch(
+            f"/api/v1/checklists/{cl.id}/items/0",
+            json={"is_checked": True, "expected_checklist_version": cl.version + 999},
+        )
+        assert resp.status_code == 409
+        body = resp.json()
+        assert body["error"]["code"] == "CHECKLIST_VERSION_MISMATCH"
+
+
+@pytest.mark.anyio
+class TestChecklistCompletionEvent:
+    """All items checked → checklist_completed event — TASK-35."""
+
+    async def test_all_checked_triggers_completion(self, client: AsyncClient, db: AsyncSession):
+        """When all items are checked, status becomes 'completed'."""
+        items = [
+            {"name": "Item1", "category": "bid_time", "source": "spec", "is_checked": True},
+            {"name": "Item2", "category": "bid_time", "source": "spec", "is_checked": False},
+        ]
+        case, cl = await _setup_checklist(db, "complete-1", checklist_items=items)
+
+        # Check the last unchecked item
+        resp = await client.patch(
+            f"/api/v1/checklists/{cl.id}/items/1",
+            json={"is_checked": True},
+        )
+        assert resp.status_code == 200
+        data = resp.json()["data"]
+        assert data["progress"]["done"] == 2
+        assert data["progress"]["total"] == 2
+        assert data["status"] == "completed"

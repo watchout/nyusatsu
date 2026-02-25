@@ -1,11 +1,13 @@
 """Checklist API endpoints — F-004.
 
 Provides read/update access to checklists.
+Includes optimistic locking (TASK-35) and completion event.
 """
 
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -13,17 +15,21 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.errors import NotFoundError
+from app.core.errors import ChecklistVersionMismatchError, NotFoundError
+from app.models.case import Case
 from app.models.checklist import Checklist
 from app.schemas.envelope import SuccessResponse
+from app.services.event_service import EventService
 from app.services.version_manager import VersionManager
 
 router = APIRouter(prefix="/api/v1", tags=["checklists"])
 _vm = VersionManager(Checklist)
+_event_service = EventService()
 
 
 class CheckItemRequest(BaseModel):
     is_checked: bool
+    expected_checklist_version: int | None = None
 
 
 class AddItemRequest(BaseModel):
@@ -63,12 +69,31 @@ async def toggle_check_item(
     body: CheckItemRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    """Toggle check/uncheck on a checklist item."""
+    """Toggle check/uncheck on a checklist item.
+
+    Supports optimistic lock via expected_checklist_version (SSOT-3 §4-5).
+    When all items become checked, records checklist_completed event.
+    """
     stmt = select(Checklist).where(Checklist.id == checklist_id)
     result = await db.execute(stmt)
     checklist = result.scalar_one_or_none()
     if not checklist:
         raise NotFoundError(message="Checklist not found")
+
+    # --- Optimistic lock (TASK-35) ---
+    if body.expected_checklist_version is not None:
+        if body.expected_checklist_version != checklist.version:
+            raise ChecklistVersionMismatchError(
+                message=(
+                    f"Checklist version mismatch. "
+                    f"Expected {body.expected_checklist_version} "
+                    f"but found {checklist.version}."
+                ),
+                details={
+                    "expected": body.expected_checklist_version,
+                    "actual": checklist.version,
+                },
+            )
 
     items = list(checklist.checklist_items)
     if item_index < 0 or item_index >= len(items):
@@ -85,6 +110,27 @@ async def toggle_check_item(
         "done": done,
         "rate": round(done / total, 2) if total > 0 else 0.0,
     }
+
+    # --- Completion event (TASK-35) ---
+    if done == total and total > 0:
+        checklist.status = "completed"
+        checklist.completed_at = datetime.now(timezone.utc)
+
+        case = (
+            await db.execute(select(Case).where(Case.id == checklist.case_id))
+        ).scalar_one_or_none()
+        if case:
+            await _event_service.record_non_transition_event(
+                db,
+                case=case,
+                event_type="checklist_completed",
+                triggered_by="user",
+                feature_origin="F-004",
+                payload={
+                    "checklist_id": str(checklist.id),
+                    "progress": checklist.progress,
+                },
+            )
 
     await db.flush()
     return SuccessResponse(data=_checklist_to_dict(checklist))

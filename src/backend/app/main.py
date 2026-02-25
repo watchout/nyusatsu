@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from app.api.actions import router as actions_router
 from app.api.batch_trigger import router as batch_trigger_router
 from app.api.case_cards import router as case_cards_router
+from app.api.cases import router as cases_router
 from app.api.checklists import router as checklists_router
 from app.api.eligibility import router as eligibility_router
 from app.api.health import health_check
@@ -35,6 +36,7 @@ def create_app() -> FastAPI:
         return SuccessResponse(data=result)
 
     # --- API Routers ---
+    app.include_router(cases_router)
     app.include_router(actions_router)
     app.include_router(case_cards_router)
     app.include_router(eligibility_router)

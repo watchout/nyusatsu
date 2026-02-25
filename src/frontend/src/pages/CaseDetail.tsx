@@ -15,6 +15,8 @@ import type { Case } from '../types/case';
 import StageBadge from '../components/StageBadge';
 import CaseOverview from '../components/CaseOverview';
 import ReadingTab from '../components/ReadingTab';
+import EligibilityTab from '../components/EligibilityTab';
+import type { Verdict } from '../types/enums';
 
 type TabId = 'overview' | 'reading' | 'eligibility' | 'checklist' | 'history';
 
@@ -78,6 +80,22 @@ export default function CaseDetail() {
       } catch (err) {
         // TODO: show error toast
         console.error('Action failed:', err);
+      }
+    },
+    [id, loadCase],
+  );
+
+  const handleOverride = useCallback(
+    async (verdict: Verdict, reason: string) => {
+      if (!id) return;
+      try {
+        await postJson(`/cases/${id}/eligibility/override`, {
+          verdict,
+          override_reason: reason,
+        });
+        await loadCase();
+      } catch (err) {
+        console.error('Override failed:', err);
       }
     },
     [id, loadCase],
@@ -159,9 +177,15 @@ export default function CaseDetail() {
         )}
         {activeTab === 'eligibility' && (
           <div data-testid="tab-content-eligibility">
-            {caseData.eligibility
-              ? '適格性判定結果（実装予定）'
-              : 'AI 読解が完了すると、自動で判定が実行されます。'}
+            {caseData.eligibility ? (
+              <EligibilityTab
+                eligibility={caseData.eligibility}
+                stage={caseData.current_lifecycle_stage}
+                onOverride={handleOverride}
+              />
+            ) : (
+              'AI 読解が完了すると、自動で判定が実行されます。'
+            )}
           </div>
         )}
         {activeTab === 'checklist' && (

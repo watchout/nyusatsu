@@ -186,7 +186,7 @@ export default function CaseDetail() {
             {caseData.card ? (
               <ReadingTab
                 card={caseData.card}
-                onMarkReviewed={() => handleAction('mark_reviewed')}
+                onMarkReviewed={() => handleAction('mark-reviewed')}
               />
             ) : (
               'この案件はまだ AI 読解されていません。'

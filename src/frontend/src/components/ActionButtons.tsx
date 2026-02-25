@@ -29,49 +29,49 @@ interface ButtonDef {
 
 const BUTTONS: ButtonDef[] = [
   {
-    action: 'mark_planned',
+    action: 'mark-planned',
     label: '応札予定にする',
     gate: 'G1',
     showWhen: ['under_review'],
     variant: 'primary',
   },
   {
-    action: 'mark_skipped',
+    action: 'mark-skipped',
     label: '見送り',
     gate: 'G2',
     showWhen: ['under_review'],
     variant: 'secondary',
   },
   {
-    action: 'retry_reading',
-    label: '再読解',
+    action: 'retry-reading',
+    label: '再読解（リトライ）',
     gate: 'G3',
     showWhen: ['reading_failed'],
     variant: 'warning',
   },
   {
-    action: 'retry_judging',
-    label: '再判定',
+    action: 'retry-judging',
+    label: '再判定（リトライ）',
     gate: 'G5',
     showWhen: ['judging_failed'],
     variant: 'warning',
   },
   {
-    action: 're_reading',
+    action: 'retry-reading',
     label: '再読解',
     gate: 'G6',
     showWhen: ['reading_completed'],
     variant: 'secondary',
   },
   {
-    action: 're_judging',
+    action: 'retry-judging',
     label: '再判定',
     gate: 'G7',
     showWhen: ['judging_completed'],
     variant: 'secondary',
   },
   {
-    action: 're_checklist',
+    action: 'retry-checklist',
     label: '再生成',
     gate: 'G8',
     showWhen: ['checklist_active'],
@@ -125,8 +125,8 @@ export default function ActionButtons({
 
         return (
           <button
-            key={btn.action}
-            data-testid={`action-${btn.action}`}
+            key={btn.gate}
+            data-testid={`action-${btn.gate}`}
             onClick={() => onAction(btn.action)}
             disabled={isDisabled}
             style={{

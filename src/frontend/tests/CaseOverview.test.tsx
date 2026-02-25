@@ -145,16 +145,16 @@ describe('CaseDetail — ActionButtons', () => {
     setupMock();
     renderCaseDetail();
     await waitFor(() => {
-      expect(screen.getByTestId('action-mark_planned')).toBeInTheDocument();
+      expect(screen.getByTestId('action-G1')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('action-mark_skipped')).toBeInTheDocument();
+    expect(screen.getByTestId('action-G2')).toBeInTheDocument();
   });
 
   it('shows archive button on all non-archived stages', async () => {
     setupMock();
     renderCaseDetail();
     await waitFor(() => {
-      expect(screen.getByTestId('action-archive')).toBeInTheDocument();
+      expect(screen.getByTestId('action--')).toBeInTheDocument();
     });
   });
 
@@ -162,7 +162,7 @@ describe('CaseDetail — ActionButtons', () => {
     setupMock({ ...baseCaseData, current_lifecycle_stage: 'reading_failed' });
     renderCaseDetail();
     await waitFor(() => {
-      expect(screen.getByTestId('action-retry_reading')).toBeInTheDocument();
+      expect(screen.getByTestId('action-G3')).toBeInTheDocument();
     });
   });
 
@@ -173,11 +173,11 @@ describe('CaseDetail — ActionButtons', () => {
     });
     renderCaseDetail();
     await waitFor(() => {
-      expect(screen.getByTestId('action-archive')).toBeInTheDocument();
+      expect(screen.getByTestId('action--')).toBeInTheDocument();
     });
     // No gate buttons visible for reading_in_progress
     expect(
-      screen.queryByTestId('action-mark_planned'),
+      screen.queryByTestId('action-G1'),
     ).not.toBeInTheDocument();
   });
 
@@ -186,13 +186,13 @@ describe('CaseDetail — ActionButtons', () => {
     renderCaseDetail();
     // Wait for case to load
     await waitFor(() => {
-      expect(screen.getByTestId('action-archive')).toBeInTheDocument();
+      expect(screen.getByTestId('action--')).toBeInTheDocument();
     });
     expect(
-      screen.queryByTestId('action-mark_planned'),
+      screen.queryByTestId('action-G1'),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByTestId('action-mark_skipped'),
+      screen.queryByTestId('action-G2'),
     ).not.toBeInTheDocument();
   });
 });

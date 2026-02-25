@@ -308,4 +308,61 @@ describe('Dashboard', () => {
       expect(calls.length).toBeGreaterThan(0);
     });
   });
+
+  it('shows batch trigger button', async () => {
+    setupMocks();
+    await act(async () => {
+      renderDashboard();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('batch-trigger-btn')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('batch-trigger-btn')).toHaveTextContent('バッチ実行');
+  });
+
+  it('calls POST /batch/trigger when button is clicked', async () => {
+    setupMocks();
+    await act(async () => {
+      renderDashboard();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('batch-trigger-btn')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('batch-trigger-btn'));
+
+    await waitFor(() => {
+      const triggerCalls = mockFetch.mock.calls.filter(
+        (c: unknown[]) =>
+          String(c[0]).includes('/api/v1/batch/trigger'),
+      );
+      expect(triggerCalls.length).toBeGreaterThan(0);
+      // Verify it was a POST request
+      const opts = triggerCalls[0][1] as Record<string, unknown> | undefined;
+      expect(opts?.method).toBe('POST');
+    });
+  });
+
+  it('disables trigger button when batch is running', async () => {
+    setupMocks([], 0, 0, {
+      id: 'b1',
+      status: 'running',
+      started_at: '2026-02-25T06:00:00Z',
+      new_count: 0,
+      source: 'chotatku_portal',
+      feature_origin: 'F-001',
+      batch_type: 'case_fetch',
+      total_fetched: 0,
+      updated_count: 0,
+      unchanged_count: 0,
+      error_count: 0,
+    });
+    await act(async () => {
+      renderDashboard();
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('batch-trigger-btn')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('batch-trigger-btn')).toBeDisabled();
+  });
 });

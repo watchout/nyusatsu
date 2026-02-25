@@ -1,6 +1,5 @@
 """FastAPI application factory."""
 
-import structlog
 from fastapi import FastAPI
 
 from app.api.actions import router as actions_router
@@ -15,12 +14,13 @@ from app.api.events import router as events_router
 from app.api.health import health_check
 from app.core.config import settings
 from app.core.exception_handlers import register_exception_handlers
+from app.core.logging import configure_logging
 from app.schemas.envelope import SuccessResponse
 
 
 def create_app() -> FastAPI:
     """Build and configure the FastAPI application."""
-    _configure_logging()
+    configure_logging()
 
     app = FastAPI(
         title="入札ラクダAI API",
@@ -50,21 +50,6 @@ def create_app() -> FastAPI:
     app.include_router(analytics_router)
 
     return app
-
-
-def _configure_logging() -> None:
-    """Set up structlog with JSON output per SSOT-5 §11."""
-    structlog.configure(
-        processors=[
-            structlog.contextvars.merge_contextvars,
-            structlog.stdlib.add_log_level,
-            structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.JSONRenderer(),
-        ],
-        wrapper_class=structlog.stdlib.BoundLogger,
-        logger_factory=structlog.PrintLoggerFactory(),
-        cache_logger_on_first_use=True,
-    )
 
 
 app = create_app()

@@ -1,7 +1,7 @@
 {
-  "projectDir": "/Users/kaneko/nyusatsu",
+  "projectDir": "/Users/yuji/Developer/nyusatsu",
   "projectName": "nyusatsu",
-  "scannedAt": "2026-02-17T00:43:14.706Z",
+  "scannedAt": "2026-03-03T11:26:26.449Z",
   "directory": {
     "hasSrc": true,
     "hasDocs": true,
@@ -14,46 +14,88 @@
       "docs",
       "src"
     ],
-    "srcSubdirs": []
+    "srcSubdirs": [
+      "backend",
+      "frontend"
+    ]
   },
   "techStack": [],
   "fileStats": {
-    "totalFiles": 50,
-    "totalLines": 11908,
+    "totalFiles": 131,
+    "totalLines": 34022,
     "byExtension": {
-      ".json": 1,
-      ".md": 49
+      ".md": 71,
+      ".json": 13,
+      ".js": 1,
+      ".tsx": 34,
+      ".ts": 12
     }
   },
   "existingDocs": [
     {
       "path": "docs/design/core/SSOT-2_UI_STATE.md",
       "name": "SSOT-2_UI_STATE.md",
-      "sizeBytes": 0,
+      "sizeBytes": 42092,
       "category": "core"
     },
     {
       "path": "docs/design/core/SSOT-3_API_CONTRACT.md",
       "name": "SSOT-3_API_CONTRACT.md",
-      "sizeBytes": 0,
+      "sizeBytes": 41139,
       "category": "core"
     },
     {
       "path": "docs/design/core/SSOT-4_DATA_MODEL.md",
       "name": "SSOT-4_DATA_MODEL.md",
-      "sizeBytes": 0,
+      "sizeBytes": 50771,
       "category": "core"
     },
     {
       "path": "docs/design/core/SSOT-5_CROSS_CUTTING.md",
       "name": "SSOT-5_CROSS_CUTTING.md",
-      "sizeBytes": 0,
+      "sizeBytes": 56876,
       "category": "core"
+    },
+    {
+      "path": "docs/design/features/project/F-001_案件自動収集.md",
+      "name": "F-001_案件自動収集.md",
+      "sizeBytes": 29712,
+      "category": "project"
+    },
+    {
+      "path": "docs/design/features/project/F-002_AI読解.md",
+      "name": "F-002_AI読解.md",
+      "sizeBytes": 42080,
+      "category": "project"
+    },
+    {
+      "path": "docs/design/features/project/F-003_参加可否判定.md",
+      "name": "F-003_参加可否判定.md",
+      "sizeBytes": 30730,
+      "category": "project"
+    },
+    {
+      "path": "docs/design/features/project/F-004_チェックリスト生成.md",
+      "name": "F-004_チェックリスト生成.md",
+      "sizeBytes": 33923,
+      "category": "project"
+    },
+    {
+      "path": "docs/design/features/project/F-005_価格分析.md",
+      "name": "F-005_価格分析.md",
+      "sizeBytes": 22687,
+      "category": "project"
     },
     {
       "path": "docs/idea/COMPETITOR_ANALYSIS.md",
       "name": "COMPETITOR_ANALYSIS.md",
       "sizeBytes": 21554,
+      "category": "idea"
+    },
+    {
+      "path": "docs/idea/GO_TO_MARKET.md",
+      "name": "GO_TO_MARKET.md",
+      "sizeBytes": 21499,
       "category": "idea"
     },
     {
@@ -71,13 +113,25 @@
     {
       "path": "docs/idea/VALUE_PROPOSITION.md",
       "name": "VALUE_PROPOSITION.md",
-      "sizeBytes": 17727,
+      "sizeBytes": 28543,
       "category": "idea"
+    },
+    {
+      "path": "docs/management/IMPLEMENTATION_PLAN_P0.md",
+      "name": "IMPLEMENTATION_PLAN_P0.md",
+      "sizeBytes": 79875,
+      "category": "management"
+    },
+    {
+      "path": "docs/management/PHASE4_ACCEPTANCE_CHECKLIST.md",
+      "name": "PHASE4_ACCEPTANCE_CHECKLIST.md",
+      "sizeBytes": 6290,
+      "category": "management"
     },
     {
       "path": "docs/management/PROJECT_PLAN.md",
       "name": "PROJECT_PLAN.md",
-      "sizeBytes": 5987,
+      "sizeBytes": 5995,
       "category": "management"
     },
     {
@@ -129,9 +183,33 @@
       "category": "hotplus"
     },
     {
+      "path": "docs/operations/DEPLOYMENT.md",
+      "name": "DEPLOYMENT.md",
+      "sizeBytes": 191,
+      "category": "operations"
+    },
+    {
+      "path": "docs/operations/ENVIRONMENTS.md",
+      "name": "ENVIRONMENTS.md",
+      "sizeBytes": 193,
+      "category": "operations"
+    },
+    {
+      "path": "docs/operations/LAUNCH_CHECKLIST.md",
+      "name": "LAUNCH_CHECKLIST.md",
+      "sizeBytes": 2176,
+      "category": "operations"
+    },
+    {
+      "path": "docs/operations/RUNBOOK.md",
+      "name": "RUNBOOK.md",
+      "sizeBytes": 7791,
+      "category": "operations"
+    },
+    {
       "path": "docs/requirements/SSOT-0_PRD.md",
       "name": "SSOT-0_PRD.md",
-      "sizeBytes": 20899,
+      "sizeBytes": 24859,
       "category": "requirements"
     },
     {
@@ -219,6 +297,42 @@
       "category": "standards"
     },
     {
+      "path": "docs/standards/github/ISSUE_TEMPLATE/bug.md",
+      "name": "bug.md",
+      "sizeBytes": 468,
+      "category": "ISSUE_TEMPLATE"
+    },
+    {
+      "path": "docs/standards/github/ISSUE_TEMPLATE/feature-api.md",
+      "name": "feature-api.md",
+      "sizeBytes": 670,
+      "category": "ISSUE_TEMPLATE"
+    },
+    {
+      "path": "docs/standards/github/ISSUE_TEMPLATE/feature-db.md",
+      "name": "feature-db.md",
+      "sizeBytes": 682,
+      "category": "ISSUE_TEMPLATE"
+    },
+    {
+      "path": "docs/standards/github/ISSUE_TEMPLATE/feature-test.md",
+      "name": "feature-test.md",
+      "sizeBytes": 609,
+      "category": "ISSUE_TEMPLATE"
+    },
+    {
+      "path": "docs/standards/github/ISSUE_TEMPLATE/feature-ui.md",
+      "name": "feature-ui.md",
+      "sizeBytes": 650,
+      "category": "ISSUE_TEMPLATE"
+    },
+    {
+      "path": "docs/standards/github/PULL_REQUEST_TEMPLATE.md",
+      "name": "PULL_REQUEST_TEMPLATE.md",
+      "sizeBytes": 550,
+      "category": "github"
+    },
+    {
       "path": "docs/standards/growth/GROWTH_STRATEGY.md",
       "name": "GROWTH_STRATEGY.md",
       "sizeBytes": 9914,
@@ -287,7 +401,7 @@
     {
       "path": "CLAUDE.md",
       "name": "CLAUDE.md",
-      "sizeBytes": 11901,
+      "sizeBytes": 13677,
       "category": "root"
     },
     {
@@ -340,29 +454,29 @@
       "ssoId": "SSOT-2",
       "name": "UI/State",
       "path": "docs/design/core/SSOT-2_UI_STATE.md",
-      "status": "partial",
-      "recommendation": "Stub only: Flesh out UI/State with actual content"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     },
     {
       "ssoId": "SSOT-3",
       "name": "API Contract",
       "path": "docs/design/core/SSOT-3_API_CONTRACT.md",
-      "status": "partial",
-      "recommendation": "Stub only: Flesh out API Contract with actual content"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     },
     {
       "ssoId": "SSOT-4",
       "name": "Data Model",
       "path": "docs/design/core/SSOT-4_DATA_MODEL.md",
-      "status": "partial",
-      "recommendation": "Stub only: Flesh out Data Model with actual content"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     },
     {
       "ssoId": "SSOT-5",
       "name": "Cross-Cutting",
       "path": "docs/design/core/SSOT-5_CROSS_CUTTING.md",
-      "status": "partial",
-      "recommendation": "Stub only: Flesh out Cross-Cutting with actual content"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     },
     {
       "ssoId": "STD-TECH",
@@ -403,20 +517,20 @@
       "ssoId": "OPS-ENV",
       "name": "Environments",
       "path": "docs/operations/ENVIRONMENTS.md",
-      "status": "missing",
-      "recommendation": "Optional: Generate Environments when ready"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     },
     {
       "ssoId": "OPS-DEPLOY",
       "name": "Deployment",
       "path": "docs/operations/DEPLOYMENT.md",
-      "status": "missing",
-      "recommendation": "Optional: Generate Deployment when ready"
+      "status": "exists",
+      "recommendation": "Audit with 'framework audit ssot' to verify quality"
     }
   ],
   "readiness": {
-    "score": 30,
-    "maxScore": 89,
+    "score": 50,
+    "maxScore": 100,
     "details": [
       {
         "name": "package.json exists",
@@ -454,9 +568,9 @@
       },
       {
         "name": "Required SSOT documents",
-        "passed": false,
-        "points": 9,
-        "detail": "3/7 required SSOTs exist"
+        "passed": true,
+        "points": 20,
+        "detail": "7/7 required SSOTs exist"
       },
       {
         "name": "Not already managed",

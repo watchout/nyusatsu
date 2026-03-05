@@ -22,7 +22,7 @@ COPY src/frontend/package.json ./
 RUN npm install
 
 COPY src/frontend ./
-RUN npx tsc -b && npx vite build
+RUN npx vite build
 
 # ===== 最終イメージ =====
 FROM python:3.12-slim

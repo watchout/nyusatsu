@@ -18,6 +18,7 @@ const TRIGGER_LABELS: Record<TriggeredBy, string> = {
   system: 'システム',
   user: 'ユーザー',
   batch: 'バッチ',
+  cascade: 'カスケード',
 };
 
 const EVENT_TYPE_LABELS: Record<string, string> = {

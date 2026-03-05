@@ -89,7 +89,7 @@ function EligibilitySection({
         fieldKey="eligibility.unified_qualification"
         evidence={evidence}
       />
-      {data.grade && (
+      {!!data.grade && (
         <FieldRow
           label="等級"
           value={String(data.grade)}
@@ -98,7 +98,7 @@ function EligibilitySection({
           evidence={evidence}
         />
       )}
-      {data.business_category && (
+      {!!data.business_category && (
         <FieldRow
           label="営業品目"
           value={String(data.business_category)}
@@ -106,7 +106,7 @@ function EligibilitySection({
           evidence={evidence}
         />
       )}
-      {data.region && (
+      {!!data.region && (
         <FieldRow
           label="競争参加地域"
           value={String(data.region)}
@@ -114,7 +114,7 @@ function EligibilitySection({
           evidence={evidence}
         />
       )}
-      {data.additional_requirements && (
+      {!!data.additional_requirements && (
         <FieldRow
           label="その他要件"
           value={
@@ -175,10 +175,10 @@ function BusinessContentSection({
   return (
     <div data-testid="section-business_content">
       <SectionHeader title="業務内容" testId="section-header-business_content" />
-      {data.business_type && (
+      {!!data.business_type && (
         <FieldRow label="業務種別" value={String(data.business_type)} />
       )}
-      {data.summary && (
+      {!!data.summary && (
         <FieldRow
           label="概要"
           value={String(data.summary)}
@@ -186,7 +186,7 @@ function BusinessContentSection({
           evidence={evidence}
         />
       )}
-      {data.contract_type && (
+      {!!data.contract_type && (
         <FieldRow label="契約種別" value={String(data.contract_type)} />
       )}
       {data.has_spec_meeting !== undefined && (
@@ -226,19 +226,19 @@ function SubmissionItemsSection({
             <div key={i} style={itemCardStyle}>
               <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>
                 {String(item.name ?? '—')}
-                {item.assertion_type && (
+                {!!item.assertion_type && (
                   <span style={{ marginLeft: 6 }}>
                     <AssertionLabel type={item.assertion_type as 'fact' | 'inferred' | 'caution'} />
                   </span>
                 )}
               </div>
-              {item.deadline && (
+              {!!item.deadline && (
                 <div style={itemDetailStyle}>期限: {formatDate(item.deadline)}</div>
               )}
-              {item.template_source && (
+              {!!item.template_source && (
                 <div style={itemDetailStyle}>書式: {String(item.template_source)}</div>
               )}
-              {item.notes && (
+              {!!item.notes && (
                 <div style={itemDetailStyle}>{String(item.notes)}</div>
               )}
               {evidence && (
@@ -255,13 +255,13 @@ function SubmissionItemsSection({
             <div key={i} style={itemCardStyle}>
               <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>
                 {String(item.name ?? '—')}
-                {item.assertion_type && (
+                {!!item.assertion_type && (
                   <span style={{ marginLeft: 6 }}>
                     <AssertionLabel type={item.assertion_type as 'fact' | 'inferred' | 'caution'} />
                   </span>
                 )}
               </div>
-              {item.notes && (
+              {!!item.notes && (
                 <div style={itemDetailStyle}>{String(item.notes)}</div>
               )}
             </div>
@@ -310,7 +310,7 @@ function RiskFactorsSection({ data }: { data: Record<string, unknown>[] }) {
                 {String(risk.description ?? risk.risk_type ?? '—')}
               </span>
             </div>
-            {risk.detection_condition && (
+            {!!risk.detection_condition && (
               <div style={itemDetailStyle}>{String(risk.detection_condition)}</div>
             )}
           </div>

@@ -21,7 +21,7 @@ WORKDIR /app
 # bun インストール
 RUN npm install -g bun
 
-COPY src/frontend/package.json src/frontend/bun.lockb ./
+COPY src/frontend/package.json src/frontend/bun.lock ./
 RUN bun install --frozen-lockfile
 
 COPY src/frontend ./

@@ -1,0 +1,46 @@
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv/
+ENV/
+
+# Node
+node_modules/
+dist/
+.cache/
+
+# データ
+data/raw/*
+!data/raw/.gitkeep
+logs/*
+!logs/.gitkeep
+
+# 開発用
+.env
+.env.local
+*.db
+*.sqlite
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docs
+docs/
+*.md
+!README.md

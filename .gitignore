@@ -19,8 +19,10 @@ dist/
 build/
 
 # === Data & Logs ===
-data/raw/
-logs/
+data/raw/*
+!data/raw/.gitkeep
+logs/*
+!logs/.gitkeep
 
 # === IDE ===
 .idea/

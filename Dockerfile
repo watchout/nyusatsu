@@ -18,11 +18,11 @@ FROM node:20-slim AS frontend-builder
 
 WORKDIR /app
 
-COPY src/frontend/package.json src/frontend/package-lock.json ./
-RUN npm ci
+COPY src/frontend/package.json ./
+RUN npm install
 
 COPY src/frontend ./
-RUN npm run build
+RUN npx tsc -b && npx vite build
 
 # ===== 最終イメージ =====
 FROM python:3.12-slim

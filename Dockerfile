@@ -18,14 +18,11 @@ FROM node:20-slim AS frontend-builder
 
 WORKDIR /app
 
-# bun インストール
-RUN npm install -g bun
-
-COPY src/frontend/package.json src/frontend/bun.lock ./
-RUN bun install --frozen-lockfile
+COPY src/frontend/package.json src/frontend/package-lock.json ./
+RUN npm ci
 
 COPY src/frontend ./
-RUN bun run build
+RUN npm run build
 
 # ===== 最終イメージ =====
 FROM python:3.12-slim

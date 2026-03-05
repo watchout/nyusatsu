@@ -32,4 +32,3 @@ logs/*
 .DS_Store
 
 # === uv ===
-uv.lock

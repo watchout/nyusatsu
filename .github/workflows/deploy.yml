@@ -41,3 +41,27 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 160.251.209.16
+          username: deploy
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          script: |
+            # GHCR にログイン（read:packages トークン）
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u watchout --password-stdin
+
+            # 最新イメージを取得してコンテナを再起動
+            cd /home/deploy/nyusatsu
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+
+            # 起動確認
+            sleep 5
+            docker compose -f docker-compose.prod.yml ps

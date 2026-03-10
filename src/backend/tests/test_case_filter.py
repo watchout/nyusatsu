@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +22,7 @@ async def _seed_cases(db: AsyncSession) -> list[Case]:
             "bid_type": "一般競争入札",
             "region": "東京都",
             "grade": "A",
-            "submission_deadline": datetime(2025, 5, 1, tzinfo=timezone.utc),
+            "submission_deadline": datetime(2025, 5, 1, tzinfo=UTC),
         },
         {
             "source": "test",
@@ -32,7 +32,7 @@ async def _seed_cases(db: AsyncSession) -> list[Case]:
             "bid_type": "一般競争入札",
             "region": "大阪府",
             "grade": "B",
-            "submission_deadline": datetime(2025, 6, 1, tzinfo=timezone.utc),
+            "submission_deadline": datetime(2025, 6, 1, tzinfo=UTC),
         },
         {
             "source": "test",
@@ -42,7 +42,7 @@ async def _seed_cases(db: AsyncSession) -> list[Case]:
             "bid_type": "指名競争入札",
             "region": "東京都",
             "grade": "A",
-            "submission_deadline": datetime(2025, 4, 1, tzinfo=timezone.utc),
+            "submission_deadline": datetime(2025, 4, 1, tzinfo=UTC),
         },
         {
             "source": "test",
@@ -118,7 +118,7 @@ class TestCaseFilter:
         results = await f.apply(
             db,
             CaseFilterCriteria(
-                deadline_after=datetime(2025, 4, 15, tzinfo=timezone.utc),
+                deadline_after=datetime(2025, 4, 15, tzinfo=UTC),
             ),
         )
         assert len(results) == 2  # FILT-001, FILT-002

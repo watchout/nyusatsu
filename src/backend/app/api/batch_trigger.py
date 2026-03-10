@@ -19,7 +19,7 @@ router = APIRouter(prefix="/api/v1/batch", tags=["batch"])
 
 @router.post("/trigger", response_model=SuccessResponse)
 async def trigger_cascade(
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Manually trigger a cascade pipeline batch run."""
     # TODO: Use real provider from config

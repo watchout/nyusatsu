@@ -13,7 +13,6 @@ import re
 from app.core.constants import SCANNED_PDF_CHAR_THRESHOLD
 from app.services.reading.text_extractor import PdfExtraction
 
-
 _SYMBOL_PATTERN = re.compile(
     r"[^\w\s\u3000-\u9fff\uf900-\ufaff\u4e00-\u9faf\u3040-\u309f\u30a0-\u30ff]",
     re.UNICODE,

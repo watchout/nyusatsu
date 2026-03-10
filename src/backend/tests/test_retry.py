@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import pytest
 import httpx
+import pytest
 from sqlalchemy.exc import OperationalError
 
 from app.core.retry import db_retry, http_retry, llm_retry

@@ -5,9 +5,10 @@ Revises: 006
 Create Date: 2026-02-20
 """
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB, UUID
+
+from alembic import op
 
 revision = "007"
 down_revision = "006"
@@ -48,7 +49,7 @@ def upgrade() -> None:
         CREATE UNIQUE INDEX uq_eligibility_current
         ON eligibility_results(case_id) WHERE is_current = true
     """)
-    op.execute("COMMENT ON TABLE eligibility_results IS 'F-003: 参加可否判定結果。version + is_current で再判定履歴を管理'")
+    op.execute("COMMENT ON TABLE eligibility_results IS 'F-003: 参加可否判定結果。version + is_current で再判定履歴を管理'")  # noqa: E501
 
 
 def downgrade() -> None:

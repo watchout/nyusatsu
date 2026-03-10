@@ -12,8 +12,7 @@ When F-005 data is unavailable, default mid-range values are used.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
-from typing import Any
+from datetime import UTC, datetime
 
 import structlog
 from sqlalchemy import func, select
@@ -169,9 +168,7 @@ class CaseScorer:
         # Sweet spot: 5M-50M → max score, outside → lower
         if 5_000_000 <= median <= 50_000_000:
             return 25
-        elif 1_000_000 <= median < 5_000_000:
-            return 18
-        elif 50_000_000 < median <= 100_000_000:
+        elif 1_000_000 <= median < 5_000_000 or 50_000_000 < median <= 100_000_000:
             return 18
         elif median > 100_000_000:
             return 8
@@ -187,7 +184,7 @@ class CaseScorer:
         if not case.submission_deadline:
             return 13  # mid-range default
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         diff = (case.submission_deadline - now).days
 
         if diff < 0:

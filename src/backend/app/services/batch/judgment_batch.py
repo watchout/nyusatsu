@@ -5,7 +5,8 @@ Processes cases in `judging_queued` stage through the judgment pipeline.
 
 from __future__ import annotations
 
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 import structlog
 from sqlalchemy import select

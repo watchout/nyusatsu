@@ -5,14 +5,14 @@ Orchestrates prompt building, optional chunking, LLM calls, and response parsing
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import structlog
 
 from app.schemas.extraction import CaseCardExtraction, ScheduleExtraction
-from app.services.llm.base import LLMProvider, LLMResponse
+from app.services.llm.base import LLMProvider
 from app.services.reading.prompt_builder import PromptBuilder
-from app.services.reading.response_parser import ParseError, ResponseParser
+from app.services.reading.response_parser import ResponseParser
 from app.services.reading.section_chunker import SectionChunker
 
 logger = structlog.get_logger()

@@ -6,8 +6,6 @@ Covers 4 phases: preconditions, hard conditions, soft conditions, verdict.
 from decimal import Decimal
 from unittest.mock import MagicMock
 
-import pytest
-
 from app.models.company_profile import CompanyProfile
 from app.schemas.evidence import AssertionType
 from app.schemas.extraction import (
@@ -16,7 +14,6 @@ from app.schemas.extraction import (
     CaseCardExtraction,
     DeliveryLocation,
     EligibilityExtraction,
-    RiskFactor,
 )
 from app.services.judgment.judgment_engine import JudgmentEngine
 

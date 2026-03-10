@@ -8,9 +8,9 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.batch_log import BatchLog
 from app.models.case import Case
 from app.models.case_event import CaseEvent
-from app.models.batch_log import BatchLog
 from app.services.batch.case_fetch_batch import CaseFetchBatch
 from app.services.batch.runner import BatchRunner
 from app.services.case_fetch.base_adapter import BaseSourceAdapter, RawCase

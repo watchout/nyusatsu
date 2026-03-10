@@ -12,9 +12,8 @@ All filters are AND-combined. Empty filter = accept all.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Any
+from dataclasses import dataclass
+from datetime import datetime
 
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -81,24 +80,20 @@ class CaseFilter:
         Returns:
             True if the case matches all criteria.
         """
-        if criteria.keywords:
-            if not any(
-                kw.lower() in (case.case_name or "").lower()
-                for kw in criteria.keywords
-            ):
-                return False
+        if criteria.keywords and not any(
+            kw.lower() in (case.case_name or "").lower()
+            for kw in criteria.keywords
+        ):
+            return False
 
-        if criteria.bid_type:
-            if case.bid_type != criteria.bid_type:
-                return False
+        if criteria.bid_type and case.bid_type != criteria.bid_type:
+            return False
 
-        if criteria.region:
-            if case.region != criteria.region:
-                return False
+        if criteria.region and case.region != criteria.region:
+            return False
 
-        if criteria.grade:
-            if case.grade != criteria.grade:
-                return False
+        if criteria.grade and case.grade != criteria.grade:
+            return False
 
         if criteria.deadline_after:
             if not case.submission_deadline:

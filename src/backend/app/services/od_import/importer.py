@@ -12,7 +12,7 @@ Strategy:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 import structlog
@@ -24,7 +24,7 @@ from app.models.base_bid import BaseBid
 logger = structlog.get_logger()
 
 
-class UpsertAction(str, Enum):
+class UpsertAction(StrEnum):
     """Result of a single-row upsert operation."""
 
     INSERTED = "inserted"

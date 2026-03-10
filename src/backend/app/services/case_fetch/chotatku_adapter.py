@@ -11,7 +11,6 @@ Parse methods are isolated for easy replacement when HTML changes.
 from __future__ import annotations
 
 import asyncio
-import re
 import time
 from datetime import date, datetime
 from pathlib import Path

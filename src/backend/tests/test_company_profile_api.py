@@ -39,7 +39,7 @@ class TestGetCompanyProfile:
     """GET /api/v1/company-profile."""
 
     async def test_get_profile(self, client: AsyncClient, db: AsyncSession) -> None:
-        profile = await _create_profile(db)
+        await _create_profile(db)
         resp = await client.get("/api/v1/company-profile")
         assert resp.status_code == 200
         data = resp.json()["data"]

@@ -10,7 +10,7 @@ import math
 import uuid
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import String, case, func, or_, select
+from sqlalchemy import case, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -50,20 +50,20 @@ _FAILED_STAGES = frozenset({
 
 @router.get("", response_model=PaginatedResponse)
 async def list_cases(
-    db: AsyncSession = Depends(get_db),
-    lifecycle_stage: str | None = Query(None, description="Comma-sep stages"),
-    status: str | None = Query(None, description="Case status filter"),
-    score_min: int | None = Query(None, ge=0, le=100),
-    score_max: int | None = Query(None, ge=0, le=100),
-    deadline_before: str | None = Query(None, description="ISO8601"),
-    deadline_after: str | None = Query(None, description="ISO8601"),
-    needs_review: bool | None = Query(None),
-    has_failed: bool | None = Query(None),
-    search: str | None = Query(None, description="Partial match"),
-    sort: str = Query("deadline_at:asc", description="field:dir[,field:dir]"),
-    page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
-    exclude_archived: bool = Query(True),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
+    lifecycle_stage: str | None = Query(None, description="Comma-sep stages"),  # noqa: B008
+    status: str | None = Query(None, description="Case status filter"),  # noqa: B008
+    score_min: int | None = Query(None, ge=0, le=100),  # noqa: B008
+    score_max: int | None = Query(None, ge=0, le=100),  # noqa: B008
+    deadline_before: str | None = Query(None, description="ISO8601"),  # noqa: B008
+    deadline_after: str | None = Query(None, description="ISO8601"),  # noqa: B008
+    needs_review: bool | None = Query(None),  # noqa: B008
+    has_failed: bool | None = Query(None),  # noqa: B008
+    search: str | None = Query(None, description="Partial match"),  # noqa: B008
+    sort: str = Query("deadline_at:asc", description="field:dir[,field:dir]"),  # noqa: B008
+    page: int = Query(1, ge=1),  # noqa: B008
+    limit: int = Query(20, ge=1, le=100),  # noqa: B008
+    exclude_archived: bool = Query(True),  # noqa: B008
 ) -> PaginatedResponse:
     """案件一覧 (§4-1)."""
     stmt = select(Case)
@@ -158,8 +158,8 @@ async def list_cases(
 @router.get("/{case_id}", response_model=SuccessResponse)
 async def get_case_detail(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
-    include: str | None = Query(None, description="Comma-sep: card_current,..."),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
+    include: str | None = Query(None, description="Comma-sep: card_current,..."),  # noqa: B008
 ) -> SuccessResponse:
     """案件詳細 (§4-1)."""
     case = (

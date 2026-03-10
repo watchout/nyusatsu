@@ -5,7 +5,6 @@ Extracts structured text with section/page information for evidence mapping.
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass, field
 
 from bs4 import BeautifulSoup, Tag

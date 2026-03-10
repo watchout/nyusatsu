@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.core.errors import AppError
-from app.schemas.envelope import ErrorDetail, ErrorResponse, Meta
+from app.schemas.envelope import ErrorDetail, ErrorResponse
 
 logger = structlog.get_logger()
 

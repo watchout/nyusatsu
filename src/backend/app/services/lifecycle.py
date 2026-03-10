@@ -6,7 +6,7 @@ Any transition not in VALID_TRANSITIONS is rejected with InvalidTransitionError.
 
 from __future__ import annotations
 
-from app.core.errors import InvalidTransitionError, PipelineInProgressError
+from app.core.errors import InvalidTransitionError
 from app.models.case import LifecycleStage
 
 # ---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ class LifecycleManager:
         if to_stage == LifecycleStage.archived.value:
             if from_stage == LifecycleStage.archived.value:
                 raise InvalidTransitionError(
-                    message=f"Cannot archive: already archived",
+                    message="Cannot archive: already archived",
                     details={"from_stage": from_stage, "to_stage": to_stage},
                 )
             return ARCHIVE_EVENT_TYPE

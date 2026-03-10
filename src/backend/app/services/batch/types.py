@@ -8,11 +8,11 @@ BatchResult: Aggregate outcome of the entire batch run.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 
-class ItemStatus(str, Enum):
+class ItemStatus(StrEnum):
     """Outcome of a single batch item."""
 
     SUCCESS = "success"
@@ -20,7 +20,7 @@ class ItemStatus(str, Enum):
     SKIPPED = "skipped"
 
 
-class BatchStatus(str, Enum):
+class BatchStatus(StrEnum):
     """Aggregate batch outcome per §2-5.
 
     - success: all items succeeded (or 0 items)

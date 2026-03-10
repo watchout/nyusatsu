@@ -13,8 +13,8 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from enum import Enum
+from datetime import date
+from enum import StrEnum
 from typing import Any
 
 import structlog
@@ -57,7 +57,7 @@ class RawCase:
     raw_data: dict[str, Any] = field(default_factory=dict)
 
 
-class StoreAction(str, Enum):
+class StoreAction(StrEnum):
     """Result of storing a single case."""
 
     INSERTED = "inserted"
@@ -140,9 +140,7 @@ class BaseSourceAdapter(ABC):
         old_deadline = existing.submission_deadline
 
         has_change = False
-        if new_deadline and old_deadline and new_deadline != old_deadline:
-            has_change = True
-        elif normalised.get("case_name") != existing.case_name:
+        if new_deadline and old_deadline and new_deadline != old_deadline or normalised.get("case_name") != existing.case_name:  # noqa: E501
             has_change = True
 
         if not has_change:

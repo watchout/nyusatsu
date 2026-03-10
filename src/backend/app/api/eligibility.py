@@ -23,7 +23,7 @@ _vm = VersionManager(EligibilityResult)
 @router.get("/{case_id}/eligibility", response_model=SuccessResponse)
 async def get_current_eligibility(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get the current EligibilityResult for a case."""
     elig = await _vm.get_current(db, case_id=case_id)
@@ -38,7 +38,7 @@ async def get_current_eligibility(
 @router.get("/{case_id}/eligibilities", response_model=SuccessResponse)
 async def get_all_eligibilities(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get all EligibilityResult versions for a case."""
     results = await _vm.get_all_versions(db, case_id=case_id)

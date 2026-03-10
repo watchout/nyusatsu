@@ -48,14 +48,17 @@ EXTRACTION_SYSTEM_PROMPT = """\
   },
   "submission_items": {
     "bid_time_items": [
-      {"name": "...", "template_source": "発注機関指定書式/汎用テンプレート/null", "deadline": "...", "notes": "...", "assertion_type": "fact/inferred/caution"}
+      {"name": "...", "template_source": "発注機関指定書式/汎用テンプレート/null",
+       "deadline": "...", "notes": "...", "assertion_type": "fact/inferred/caution"}
     ],
     "performance_time_items": [
-      {"name": "...", "template_source": "...", "deadline": "...", "notes": "...", "assertion_type": "fact/inferred/caution"}
+      {"name": "...", "template_source": "...", "deadline": "...",
+       "notes": "...", "assertion_type": "fact/inferred/caution"}
     ]
   },
   "risk_factors": [
-    {"risk_type": "...", "label": "...", "severity": "high/medium/low", "description": "...", "assertion_type": "fact/inferred/caution"}
+    {"risk_type": "...", "label": "...", "severity": "high/medium/low",
+     "description": "...", "assertion_type": "fact/inferred/caution"}
   ]
 }
 ```

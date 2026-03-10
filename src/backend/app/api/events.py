@@ -23,16 +23,16 @@ router = APIRouter(prefix="/api/v1/cases", tags=["events"])
 @router.get("/{case_id}/events", response_model=PaginatedResponse)
 async def list_events(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
-    event_type: str | None = Query(None, description="Comma-sep event types"),
-    feature_origin: str | None = Query(None, description="F-001, F-002, etc."),
-    triggered_by: str | None = Query(None, description="user, system, batch, cascade"),
-    created_after: str | None = Query(None, description="ISO8601"),
-    created_before: str | None = Query(None, description="ISO8601"),
-    since_event_id: uuid.UUID | None = Query(None, description="Events after this ID"),
-    since_ts: str | None = Query(None, description="Events after this timestamp"),
-    page: int = Query(1, ge=1),
-    limit: int = Query(50, ge=1, le=200),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
+    event_type: str | None = Query(None, description="Comma-sep event types"),  # noqa: B008
+    feature_origin: str | None = Query(None, description="F-001, F-002, etc."),  # noqa: B008
+    triggered_by: str | None = Query(None, description="user, system, batch, cascade"),  # noqa: B008
+    created_after: str | None = Query(None, description="ISO8601"),  # noqa: B008
+    created_before: str | None = Query(None, description="ISO8601"),  # noqa: B008
+    since_event_id: uuid.UUID | None = Query(None, description="Events after this ID"),  # noqa: B008
+    since_ts: str | None = Query(None, description="Events after this timestamp"),  # noqa: B008
+    page: int = Query(1, ge=1),  # noqa: B008
+    limit: int = Query(50, ge=1, le=200),  # noqa: B008
 ) -> PaginatedResponse:
     """イベント履歴 (§4-6)."""
     stmt = select(CaseEvent).where(CaseEvent.case_id == case_id)

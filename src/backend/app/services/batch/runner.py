@@ -9,7 +9,7 @@ Manages:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 import structlog.contextvars
@@ -140,7 +140,7 @@ class BatchRunner:
         batch_log.updated_count = result.updated_count
         batch_log.unchanged_count = result.unchanged_count
         batch_log.error_count = result.error_count
-        batch_log.finished_at = datetime.now(timezone.utc)
+        batch_log.finished_at = datetime.now(UTC)
 
         # Collect error details
         error_details = [

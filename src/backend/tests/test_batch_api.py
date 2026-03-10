@@ -6,7 +6,7 @@ Tests GET /api/v1/batch/latest, /logs, /logs/:id, POST /trigger.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from httpx import AsyncClient
@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.batch_log import BatchLog
 
-_NOW = datetime.now(timezone.utc)
+_NOW = datetime.now(UTC)
 
 
 async def _create_batch_log(

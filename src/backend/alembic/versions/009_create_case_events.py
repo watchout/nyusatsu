@@ -5,9 +5,10 @@ Revises: 008
 Create Date: 2026-02-20
 """
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB, UUID
+
+from alembic import op
 
 revision = "009"
 down_revision = "008"
@@ -33,8 +34,8 @@ def upgrade() -> None:
         # タイムスタンプ
         sa.Column("created_at", sa.TIMESTAMP(timezone=True), nullable=False, server_default=sa.text("NOW()")),
     )
-    op.execute("COMMENT ON TABLE case_events IS 'イベントスパイン（監査ログ）。INSERT-ONLY: UPDATE/DELETE禁止（アプリケーション層で強制）'")
-    op.execute("COMMENT ON COLUMN case_events.event_type IS '27種のイベント型。case_discovered, reading_started, judging_completed 等'")
+    op.execute("COMMENT ON TABLE case_events IS 'イベントスパイン（監査ログ）。INSERT-ONLY: UPDATE/DELETE禁止（アプリケーション層で強制）'")  # noqa: E501
+    op.execute("COMMENT ON COLUMN case_events.event_type IS '27種のイベント型。case_discovered, reading_started, judging_completed 等'")  # noqa: E501
 
 
 def downgrade() -> None:

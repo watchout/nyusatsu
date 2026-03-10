@@ -29,14 +29,12 @@ from app.core.errors import (
     ValidationError,
 )
 from app.schemas.envelope import (
-    ErrorResponse,
     Meta,
     PaginatedMeta,
     PaginatedResponse,
     SuccessResponse,
     Warning,
 )
-
 
 # --- All 14 error classes ---
 
@@ -151,8 +149,9 @@ class TestExceptionHandlers:
         # Request a non-existent endpoint — this uses the catch-all
         # But let's test a specific error by adding a temporary route
         from fastapi import FastAPI
-        from app.core.exception_handlers import register_exception_handlers
+
         from app.core.errors import NotFoundError
+        from app.core.exception_handlers import register_exception_handlers
 
         test_app = FastAPI()
         register_exception_handlers(test_app)
@@ -176,6 +175,7 @@ class TestExceptionHandlers:
     async def test_unhandled_error_returns_internal(self, client: AsyncClient):
         """Unexpected exception produces INTERNAL_ERROR envelope."""
         from fastapi import FastAPI
+
         from app.core.exception_handlers import register_exception_handlers
 
         test_app = FastAPI(debug=False)

@@ -21,7 +21,7 @@ def _make_mock_case(**overrides) -> Case:
     case = MagicMock(spec=Case)
     case.id = overrides.get("id", uuid4())
     case.notice_url = overrides.get("notice_url", "https://example.com/notice.html")
-    case.spec_url = overrides.get("spec_url", None)
+    case.spec_url = overrides.get("spec_url")
     return case
 
 

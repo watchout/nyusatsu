@@ -30,7 +30,7 @@ async def _get_profile(db: AsyncSession) -> CompanyProfile:
 
 @router.get("", response_model=SuccessResponse)
 async def get_company_profile(
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """取得 (§4-8)."""
     profile = await _get_profile(db)
@@ -41,7 +41,7 @@ async def get_company_profile(
 @router.patch("", response_model=SuccessResponse)
 async def update_company_profile(
     body: CompanyProfileUpdate,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """部分更新 (§4-8). Only specified fields are updated."""
     profile = await _get_profile(db)

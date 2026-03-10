@@ -1,20 +1,17 @@
 """Tests for JudgmentService (F-003)."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
-from unittest.mock import AsyncMock, MagicMock
-from uuid import uuid4
 
 import pytest
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 
 from app.models.case import Case
 from app.models.case_card import CaseCard
 from app.models.company_profile import CompanyProfile
-from app.models.eligibility_result import EligibilityResult
 from app.services.judgment.judgment_service import JudgmentError, JudgmentService
 
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 def _make_case_card_data() -> dict:

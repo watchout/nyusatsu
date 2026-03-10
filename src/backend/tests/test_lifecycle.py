@@ -86,7 +86,7 @@ class TestLifecycleManager:
             "judging_queued", "judging_in_progress",
             "checklist_generating",
         }
-        assert PIPELINE_STAGES == expected
+        assert expected == PIPELINE_STAGES
         for stage in expected:
             assert LifecycleManager.is_pipeline_active(stage) is True
         # Non-pipeline stages

@@ -21,7 +21,7 @@ import asyncio
 import json
 import sys
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from sqlalchemy import func, select
@@ -155,7 +155,7 @@ async def check_circuit_breaker(session: AsyncSession) -> CheckResult:
 
     case_events に event_type='llm_circuit_open' が直近24h以内に存在するか。
     """
-    threshold = datetime.now(timezone.utc) - timedelta(hours=24)
+    threshold = datetime.now(UTC) - timedelta(hours=24)
 
     stmt = (
         select(func.count())
@@ -190,7 +190,7 @@ async def check_batch_freshness(session: AsyncSession) -> CheckResult:
 
     batch_logs の最新 started_at が 24h 以上前かチェック。
     """
-    threshold = datetime.now(timezone.utc) - timedelta(hours=24)
+    threshold = datetime.now(UTC) - timedelta(hours=24)
 
     stmt = select(func.max(BatchLog.started_at))
     result = await session.execute(stmt)
@@ -205,7 +205,7 @@ async def check_batch_freshness(session: AsyncSession) -> CheckResult:
         )
 
     if latest < threshold:
-        hours_ago = (datetime.now(timezone.utc) - latest).total_seconds() / 3600
+        hours_ago = (datetime.now(UTC) - latest).total_seconds() / 3600
         return CheckResult(
             name="batch_freshness",
             severity="MEDIUM",
@@ -290,7 +290,7 @@ async def run_all_checks() -> list[CheckResult]:
 def format_results(results: list[CheckResult]) -> str:
     """Format results as structured JSON."""
     output = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "overall_status": "PASS" if all(r.passed for r in results) else "FAIL",
         "high_failures": sum(1 for r in results if not r.passed and r.severity == "HIGH"),
         "medium_failures": sum(1 for r in results if not r.passed and r.severity == "MEDIUM"),

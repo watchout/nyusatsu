@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from app.core import constants
 
-
 # All 31 constant names from SSOT-5 §12-2
 EXPECTED_CONSTANTS = [
     # HTTP / Scraping (3)

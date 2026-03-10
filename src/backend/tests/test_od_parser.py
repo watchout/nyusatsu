@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.services.od_import.parser import ODParser, ParseError, ParsedRow
+from app.services.od_import.parser import ODParser, ParsedRow, ParseError
 
 FIXTURES = Path(__file__).parent / "fixtures" / "od"
 
@@ -110,7 +110,7 @@ class TestODParserBOM:
     def test_bom_text(self):
         """UTF-8 BOM in text is handled correctly."""
         parser = ODParser()
-        bom_text = "\ufeff案件番号,案件名称,発注機関,発注機関コード,入札方式,分類,落札金額,落札者,開札日,契約日,公告URL\nBOM-001,BOMテスト,テスト省,999,一般,役務,1000,テスト社,2025-01-01,,"
+        bom_text = "\ufeff案件番号,案件名称,発注機関,発注機関コード,入札方式,分類,落札金額,落札者,開札日,契約日,公告URL\nBOM-001,BOMテスト,テスト省,999,一般,役務,1000,テスト社,2025-01-01,,"  # noqa: E501
         results = list(parser.parse_text(bom_text))
 
         assert len(results) == 1

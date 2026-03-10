@@ -7,8 +7,8 @@ here we test the fetcher logic by patching tenacity to skip retries.
 
 from unittest.mock import AsyncMock, patch
 
-import pytest
 import httpx
+import pytest
 
 from app.services.reading.document_fetcher import DocumentFetcher, FetchResult
 

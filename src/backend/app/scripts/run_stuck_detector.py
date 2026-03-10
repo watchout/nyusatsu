@@ -11,10 +11,10 @@ from __future__ import annotations
 
 import asyncio
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import structlog
-from sqlalchemy import select, update
+from sqlalchemy import select
 
 from app.core.database import async_session
 from app.models.case import Case
@@ -36,7 +36,7 @@ STAGE_TO_FAILED = {
 
 async def main() -> int:
     logger.info("script_started", script="run_stuck_detector")
-    threshold = datetime.now(timezone.utc) - timedelta(minutes=STUCK_TIMEOUT_MINUTES)
+    threshold = datetime.now(UTC) - timedelta(minutes=STUCK_TIMEOUT_MINUTES)
 
     async with async_session() as db:
         # Find stuck cases
@@ -66,7 +66,7 @@ async def main() -> int:
 
             # Transition to failed
             case.current_lifecycle_stage = to_stage
-            case.last_updated_at = datetime.now(timezone.utc)
+            case.last_updated_at = datetime.now(UTC)
 
             # Record event
             import uuid

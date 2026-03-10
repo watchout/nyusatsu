@@ -3,18 +3,17 @@
 from __future__ import annotations
 
 import enum
-import uuid
 from datetime import datetime
 from typing import Any
 
 from sqlalchemy import TIMESTAMP, Integer, String, Text, UniqueConstraint, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, UUIDPrimaryKeyMixin
 
 
-class LifecycleStage(str, enum.Enum):
+class LifecycleStage(enum.StrEnum):
     """17-value lifecycle stage enum (SSOT-4 §3-9)."""
 
     # Discovery

@@ -4,10 +4,10 @@ Nine enum types used across all API endpoints.
 These are *schema-layer* enums (str, Enum) — separate from SQLAlchemy model enums.
 """
 
-from enum import Enum
+from enum import StrEnum
 
 
-class LifecycleStage(str, Enum):
+class LifecycleStage(StrEnum):
     """17-value lifecycle stage (SSOT-2 §2-1 / SSOT-4 §3-9)."""
 
     DISCOVERED = "discovered"
@@ -29,7 +29,7 @@ class LifecycleStage(str, Enum):
     ARCHIVED = "archived"
 
 
-class CaseStatus(str, Enum):
+class CaseStatus(StrEnum):
     """Case status (human-driven)."""
 
     NEW = "new"
@@ -39,7 +39,7 @@ class CaseStatus(str, Enum):
     ARCHIVED = "archived"
 
 
-class Verdict(str, Enum):
+class Verdict(StrEnum):
     """Eligibility verdict."""
 
     ELIGIBLE = "eligible"
@@ -47,14 +47,14 @@ class Verdict(str, Enum):
     UNCERTAIN = "uncertain"
 
 
-class ChecklistItemStatus(str, Enum):
+class ChecklistItemStatus(StrEnum):
     """Checklist item check status."""
 
     PENDING = "pending"
     DONE = "done"
 
 
-class TriggeredBy(str, Enum):
+class TriggeredBy(StrEnum):
     """Event trigger source."""
 
     SYSTEM = "system"
@@ -63,7 +63,7 @@ class TriggeredBy(str, Enum):
     CASCADE = "cascade"
 
 
-class IncludeParam(str, Enum):
+class IncludeParam(StrEnum):
     """GET /cases/:id include parameter values (§4-1)."""
 
     CARD_CURRENT = "card_current"
@@ -72,7 +72,7 @@ class IncludeParam(str, Enum):
     LATEST_EVENTS = "latest_events"
 
 
-class SortField(str, Enum):
+class SortField(StrEnum):
     """Allowed sort fields for GET /cases (§4-1)."""
 
     DEADLINE_AT = "deadline_at"
@@ -82,14 +82,14 @@ class SortField(str, Enum):
     NEEDS_REVIEW = "needs_review"
 
 
-class SortDirection(str, Enum):
+class SortDirection(StrEnum):
     """Sort direction."""
 
     ASC = "asc"
     DESC = "desc"
 
 
-class RetryScope(str, Enum):
+class RetryScope(StrEnum):
     """Retry scope for retry-* endpoints (§4-2)."""
 
     SOFT = "soft"

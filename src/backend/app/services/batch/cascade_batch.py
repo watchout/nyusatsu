@@ -6,7 +6,8 @@ Integrates with CircuitBreaker: 3 consecutive LLM failures → skip remaining.
 
 from __future__ import annotations
 
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 import structlog
 from sqlalchemy import select
@@ -16,7 +17,7 @@ from app.core.constants import CASCADE_FAILURE_THRESHOLD
 from app.models.case import Case
 from app.services.batch.base import BaseBatchRunner
 from app.services.batch.types import BatchConfig, BatchItemResult, ItemStatus
-from app.services.cascade.cascade_pipeline import CascadePipeline, CascadeResult
+from app.services.cascade.cascade_pipeline import CascadePipeline
 from app.services.llm.base import LLMProvider
 
 logger = structlog.get_logger()

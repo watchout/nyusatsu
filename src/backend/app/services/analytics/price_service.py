@@ -15,11 +15,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
-from decimal import Decimal
-from typing import Any
 
 import structlog
-from sqlalchemy import and_, case, func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.base_bid import BaseBid

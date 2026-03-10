@@ -48,7 +48,7 @@ def _batch_to_dict(log: BatchLog) -> dict:
 
 @router.get("/latest", response_model=SuccessResponse)
 async def get_latest_batch(
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """最新バッチ状態 (§4-7)."""
     stmt = select(BatchLog).order_by(BatchLog.started_at.desc()).limit(1)
@@ -62,9 +62,9 @@ async def get_latest_batch(
 
 @router.get("/logs", response_model=PaginatedResponse)
 async def list_batch_logs(
-    db: AsyncSession = Depends(get_db),
-    page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
+    page: int = Query(1, ge=1),  # noqa: B008
+    limit: int = Query(20, ge=1, le=100),  # noqa: B008
 ) -> PaginatedResponse:
     """バッチ履歴 (§4-7)."""
     count_stmt = select(func.count()).select_from(BatchLog)
@@ -91,7 +91,7 @@ async def list_batch_logs(
 @router.get("/logs/{log_id}", response_model=SuccessResponse)
 async def get_batch_log(
     log_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """バッチ詳細 (§4-7)."""
     stmt = select(BatchLog).where(BatchLog.id == log_id)
@@ -108,7 +108,7 @@ async def get_batch_log(
 
 @router.post("/trigger", response_model=SuccessResponse)
 async def trigger_cascade(
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """手動バッチ起動 (§4-7)."""
     provider = MockProvider()

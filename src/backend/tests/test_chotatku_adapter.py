@@ -5,8 +5,6 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-import pytest
-
 from app.services.case_fetch.chotatku_adapter import ChotatkuPortalAdapter
 
 FIXTURES = Path(__file__).parent / "fixtures" / "portal"

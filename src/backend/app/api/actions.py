@@ -25,9 +25,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.errors import NotFoundError, SkipReasonRequiredError
+from app.core.errors import NotFoundError
 from app.models.case import Case
-from app.schemas.actions import ActionRequest, OverrideRequest, SkipRequest
+from app.schemas.actions import OverrideRequest, SkipRequest
 from app.schemas.envelope import SuccessResponse
 from app.services.event_service import EventService
 
@@ -47,7 +47,7 @@ async def _get_case(db: AsyncSession, case_id: str) -> Case:
     try:
         uid = uuid.UUID(case_id)
     except ValueError:
-        raise NotFoundError(
+        raise NotFoundError(  # noqa: B904
             message=f"Invalid case ID: {case_id}",
             details={"case_id": case_id},
         )
@@ -82,7 +82,7 @@ def _case_summary(case: Case) -> dict:
 @router.post("/{case_id}/actions/mark-reviewed")
 async def mark_reviewed(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T02: scored → under_review, or T25: skipped → under_review."""
     case = await _get_case(db, case_id)
@@ -102,7 +102,7 @@ async def mark_reviewed(
 @router.post("/{case_id}/actions/mark-planned")
 async def mark_planned(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T03: under_review → planned, then cascade T05: planned → reading_queued."""
     case = await _get_case(db, case_id)
@@ -133,7 +133,7 @@ async def mark_planned(
 async def mark_skipped(
     case_id: str,
     body: SkipRequest,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T04: under_review → skipped. Reason required (422)."""
     case = await _get_case(db, case_id)
@@ -155,7 +155,7 @@ async def mark_skipped(
 @router.post("/{case_id}/actions/restore")
 async def restore(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T25: skipped → under_review."""
     case = await _get_case(db, case_id)
@@ -176,7 +176,7 @@ async def restore(
 @router.post("/{case_id}/actions/archive")
 async def archive(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T40: any non-archived → archived."""
     case = await _get_case(db, case_id)
@@ -194,7 +194,7 @@ async def archive(
 @router.post("/{case_id}/actions/retry-reading")
 async def retry_reading(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T20/T22: * → reading_queued."""
     case = await _get_case(db, case_id)
@@ -214,7 +214,7 @@ async def retry_reading(
 @router.post("/{case_id}/actions/retry-judging")
 async def retry_judging(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T21/T23: * → judging_queued."""
     case = await _get_case(db, case_id)
@@ -234,7 +234,7 @@ async def retry_judging(
 @router.post("/{case_id}/actions/retry-checklist")
 async def retry_checklist(
     case_id: str,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T24: checklist_active → checklist_generating."""
     case = await _get_case(db, case_id)
@@ -255,7 +255,7 @@ async def retry_checklist(
 async def override_action(
     case_id: str,
     body: OverrideRequest,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ) -> SuccessResponse:
     """T30: metadata update only (non-transition event). Reason required."""
     case = await _get_case(db, case_id)

@@ -78,7 +78,7 @@ class LLMProvider(ABC):
             httpx.ConnectError: On connection failure.
         """
 
-    async def close(self) -> None:
+    async def close(self) -> None:  # noqa: B027
         """Release provider resources (HTTP connections, etc.).
 
         Override if the provider holds stateful resources.

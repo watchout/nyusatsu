@@ -11,7 +11,7 @@ from app.schemas.extraction import (
     SubmissionItem,
     SubmissionItemsExtraction,
 )
-from app.services.reading.evidence_mapper import EvidenceMatch, EvidenceMappingResult
+from app.services.reading.evidence_mapper import EvidenceMappingResult, EvidenceMatch
 from app.services.reading.quality_checker import QualityChecker
 
 

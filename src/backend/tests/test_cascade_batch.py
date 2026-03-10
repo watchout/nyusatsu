@@ -1,8 +1,7 @@
 """Tests for CascadeBatch (Wave 6)."""
 
-from datetime import datetime, timezone
-from unittest.mock import AsyncMock, MagicMock, patch
-from uuid import uuid4
+from datetime import UTC, datetime
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -12,7 +11,7 @@ from app.services.batch.types import ItemStatus
 from app.services.cascade.cascade_pipeline import CascadeResult
 from app.services.llm.mock import MockProvider
 
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 @pytest.mark.anyio

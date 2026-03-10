@@ -1,19 +1,17 @@
 """Tests for ChecklistService (F-004)."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import uuid4
 
 import pytest
-from sqlalchemy import delete
 
 from app.models.case import Case
 from app.models.case_card import CaseCard
-from app.models.company_profile import CompanyProfile
 from app.models.eligibility_result import EligibilityResult
 from app.services.checklist_gen.checklist_service import ChecklistError, ChecklistService
 
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 def _card_data() -> dict:
@@ -54,7 +52,7 @@ async def _setup_eligible(db) -> tuple[Case, CaseCard, EligibilityResult]:
     card = CaseCard(
         case_id=case.id, version=1, is_current=True,
         confidence_score=Decimal("0.85"),
-        deadline_at=datetime(2026, 3, 15, 17, 0, tzinfo=timezone.utc),
+        deadline_at=datetime(2026, 3, 15, 17, 0, tzinfo=UTC),
         **_card_data(),
     )
     db.add(card)

@@ -25,9 +25,7 @@ def _is_business_day(d: date) -> bool:
     """Check if a date is a business day (not weekend, not Japanese holiday)."""
     if d.weekday() >= 5:  # Saturday=5, Sunday=6
         return False
-    if jpholiday.is_holiday(d):
-        return False
-    return True
+    return not jpholiday.is_holiday(d)
 
 
 def _reverse_business_days(base_date: date, offset: int) -> date:
@@ -74,10 +72,7 @@ class ScheduleCalculator:
         if deadline_at is None:
             return []
 
-        if isinstance(deadline_at, datetime):
-            base = deadline_at.date()
-        else:
-            base = deadline_at
+        base = deadline_at.date() if isinstance(deadline_at, datetime) else deadline_at
 
         stages: list[dict[str, Any]] = []
 

@@ -7,13 +7,13 @@ Defines the fixed JSON contract for root evidence mapping.
 
 from __future__ import annotations
 
-from enum import Enum
-from typing import Literal, Union
+from enum import StrEnum
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
 
-class AssertionType(str, Enum):
+class AssertionType(StrEnum):
     """Assertion confidence level per F-002 §3-B-1."""
 
     FACT = "fact"
@@ -43,5 +43,5 @@ class HtmlEvidence(BaseModel):
     assertion_type: AssertionType
 
 
-EvidenceRef = Union[PdfEvidence, HtmlEvidence]
+EvidenceRef = PdfEvidence | HtmlEvidence
 """Discriminated union for evidence references (PDF or HTML)."""

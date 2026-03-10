@@ -1,7 +1,8 @@
 """Tests for FileStore (F-002 Stage 1)."""
 
-import pytest
 from uuid import uuid4
+
+import pytest
 
 from app.services.reading.file_store import FileStore
 

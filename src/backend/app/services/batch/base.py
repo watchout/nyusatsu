@@ -9,7 +9,8 @@ Subclass ``BaseBatchRunner`` and implement:
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -49,8 +50,8 @@ class BaseBatchRunner(ABC):
             Exception: Caught by BatchRunner; recorded as failure.
         """
 
-    async def on_batch_start(self) -> None:
+    async def on_batch_start(self) -> None:  # noqa: B027
         """Hook called before processing starts. Override for setup."""
 
-    async def on_batch_end(self) -> None:
+    async def on_batch_end(self) -> None:  # noqa: B027
         """Hook called after processing ends. Override for cleanup."""

@@ -7,15 +7,15 @@ itself manages batch_logs independently.
 
 from __future__ import annotations
 
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
 
 import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.batch_log import BatchLog
 from app.models.case import Case
 from app.models.case_event import CaseEvent
-from app.models.batch_log import BatchLog
 from app.services.batch.base import BaseBatchRunner
 from app.services.batch.runner import BatchRunner
 from app.services.batch.types import (

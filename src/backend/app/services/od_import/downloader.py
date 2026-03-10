@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import zipfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
 from typing import NamedTuple
@@ -69,17 +69,14 @@ class ODDownloader:
         sha256 = hashlib.sha256(raw_bytes).hexdigest()
 
         # Save raw file
-        ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
         suffix = ".zip" if self._is_zip(raw_bytes) else ".csv"
         filename = f"od_{ts}_{sha256[:8]}{suffix}"
         file_path = self._raw_dir / filename
         file_path.write_bytes(raw_bytes)
 
         # Extract CSV text
-        if self._is_zip(raw_bytes):
-            csv_text = self._extract_csv_from_zip(raw_bytes)
-        else:
-            csv_text = self._decode_csv(raw_bytes)
+        csv_text = self._extract_csv_from_zip(raw_bytes) if self._is_zip(raw_bytes) else self._decode_csv(raw_bytes)
 
         logger.info(
             "od_download_complete",

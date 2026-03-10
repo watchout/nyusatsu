@@ -9,7 +9,7 @@ from unittest.mock import patch
 import pytest
 
 from app.services.llm import get_llm_provider
-from app.services.llm.base import LLMRequest, LLMResponse
+from app.services.llm.base import LLMRequest
 from app.services.llm.mock import MockProvider
 
 

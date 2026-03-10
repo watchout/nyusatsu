@@ -8,7 +8,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from app.core.constants import CONFIDENCE_THRESHOLD
-from app.schemas.evidence import AssertionType
 from app.schemas.extraction import CaseCardExtraction
 from app.services.reading.evidence_mapper import EvidenceMappingResult
 

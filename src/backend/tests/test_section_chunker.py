@@ -1,6 +1,6 @@
 """Tests for SectionChunker (F-002 Stage 2)."""
 
-from app.services.reading.section_chunker import SectionChunker, TextChunk
+from app.services.reading.section_chunker import SectionChunker
 
 
 class TestSectionChunker:

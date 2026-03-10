@@ -6,7 +6,7 @@ Defines the standard response format used by all API endpoints:
 - ErrorResponse: { data: null, error: { code, message, details }, meta }
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -24,7 +24,7 @@ class Warning(BaseModel):
 class Meta(BaseModel):
     """Base response metadata."""
 
-    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     request_id: str = Field(default_factory=lambda: str(uuid4()))
     warnings: list[Warning] | None = None
 

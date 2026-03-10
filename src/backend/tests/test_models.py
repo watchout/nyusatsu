@@ -10,7 +10,7 @@ import uuid
 from decimal import Decimal
 
 import pytest
-from sqlalchemy import select, text
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import (
@@ -26,7 +26,6 @@ from app.models import (
     LifecycleStage,
 )
 from app.services.crud import CRUDBase
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -109,7 +108,7 @@ class TestCaseModel:
         await db.flush()
 
         db.add(Case(**data))
-        with pytest.raises(Exception):  # IntegrityError
+        with pytest.raises(Exception):  # IntegrityError  # noqa: B017
             await db.flush()
 
 

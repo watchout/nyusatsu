@@ -1,11 +1,10 @@
 """Tests for ReadingBatch (F-002 Stage 3)."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
 
 import pytest
-from sqlalchemy import select
 
 from app.models.case import Case
 from app.models.case_card import CaseCard
@@ -14,8 +13,7 @@ from app.services.batch.types import ItemStatus
 from app.services.llm.mock import MockProvider
 from app.services.reading.reading_service import ReadingError
 
-
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 @pytest.mark.anyio

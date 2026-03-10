@@ -1,6 +1,6 @@
 """Tests for ScheduleCalculator (F-004)."""
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
 from app.services.checklist_gen.schedule_calculator import (
     ScheduleCalculator,
@@ -14,7 +14,7 @@ class TestScheduleCalculator:
         """Standard 4-stage reverse schedule."""
         calc = ScheduleCalculator()
         # 2026-03-16 is a Monday
-        deadline = datetime(2026, 3, 16, 17, 0, tzinfo=timezone.utc)
+        deadline = datetime(2026, 3, 16, 17, 0, tzinfo=UTC)
         stages = calc.calculate(deadline)
 
         assert len(stages) == 4
@@ -27,7 +27,7 @@ class TestScheduleCalculator:
     def test_with_quote_deadline(self) -> None:
         """Quote deadline adds a 5th stage at the beginning."""
         calc = ScheduleCalculator()
-        deadline = datetime(2026, 3, 16, 17, 0, tzinfo=timezone.utc)
+        deadline = datetime(2026, 3, 16, 17, 0, tzinfo=UTC)
         stages = calc.calculate(
             deadline, quote_deadline="2026-03-10T17:00:00+09:00",
         )

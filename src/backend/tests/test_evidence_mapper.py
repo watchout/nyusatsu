@@ -4,7 +4,6 @@ from app.schemas.extraction import (
     BusinessContentExtraction,
     CaseCardExtraction,
     EligibilityExtraction,
-    ScheduleExtraction,
 )
 from app.services.reading.evidence_mapper import EvidenceMapper
 from app.services.reading.text_extractor import (

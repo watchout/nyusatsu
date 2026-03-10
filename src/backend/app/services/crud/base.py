@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Generic, Sequence, TypeVar
+from collections.abc import Sequence
+from typing import Any, TypeVar
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,7 +14,7 @@ from app.models.base import Base
 ModelType = TypeVar("ModelType", bound=Base)
 
 
-class CRUDBase(Generic[ModelType]):
+class CRUDBase[ModelType: Base]:
     """Reusable async CRUD operations for any ORM model.
 
     Usage:

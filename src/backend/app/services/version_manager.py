@@ -40,7 +40,7 @@ Both operations run in the caller's transaction (no internal commit).
 from __future__ import annotations
 
 import uuid
-from typing import Any, Generic, TypeVar
+from typing import Any, TypeVar
 
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -50,7 +50,7 @@ from app.models.base import Base
 VersionedModel = TypeVar("VersionedModel", bound=Base)
 
 
-class VersionManager(Generic[VersionedModel]):
+class VersionManager[VersionedModel: Base]:
     """Generic version rotation for versioned models.
 
     Usage:

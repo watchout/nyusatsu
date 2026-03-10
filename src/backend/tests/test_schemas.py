@@ -12,7 +12,7 @@ Validates:
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 
 import pytest
@@ -44,8 +44,7 @@ from app.schemas.enums import (
 )
 from app.schemas.event import EventResponse, FoldedCheckOperations
 
-
-_NOW = datetime.now(timezone.utc)
+_NOW = datetime.now(UTC)
 _UUID = uuid.uuid4()
 
 

@@ -28,11 +28,11 @@ _svc = PriceAnalyticsService()
 
 @router.get("/price-summary", response_model=SuccessResponse)
 async def get_price_summary(
-    db: AsyncSession = Depends(get_db),
-    keyword: str | None = Query(None, description="Case name keyword"),
-    issuing_org: str | None = Query(None, description="Issuing org filter"),
-    category: str | None = Query(None, description="Category filter"),
-    period_months: int = Query(36, ge=1, le=120, description="Period in months"),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
+    keyword: str | None = Query(None, description="Case name keyword"),  # noqa: B008
+    issuing_org: str | None = Query(None, description="Issuing org filter"),  # noqa: B008
+    category: str | None = Query(None, description="Category filter"),  # noqa: B008
+    period_months: int = Query(36, ge=1, le=120, description="Period in months"),  # noqa: B008
 ) -> SuccessResponse:
     """価格分析サマリ (§4-9)."""
     today = date.today()

@@ -48,7 +48,6 @@ class CaseEvent(UUIDPrimaryKeyMixin, Base):
 
 from app.models.case import Case  # noqa: E402
 
-
 # --- INSERT-ONLY enforcement at ORM level ---
 
 @event.listens_for(CaseEvent, "before_update")

@@ -12,7 +12,8 @@ Implements BaseBatchRunner for use with BatchRunner.
 from __future__ import annotations
 
 import time
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -95,12 +96,7 @@ class ODImportBatch(BaseBatchRunner):
         # item is ParsedRow
         result = await self._importer.upsert_row(db, item.data)
 
-        if result.action == UpsertAction.INSERTED:
-            return BatchItemResult(
-                item_id=result.source_id,
-                status=ItemStatus.SUCCESS,
-            )
-        elif result.action == UpsertAction.UPDATED:
+        if result.action == UpsertAction.INSERTED or result.action == UpsertAction.UPDATED:
             return BatchItemResult(
                 item_id=result.source_id,
                 status=ItemStatus.SUCCESS,

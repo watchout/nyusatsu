@@ -7,7 +7,7 @@ and mark-reviewed action (SSOT-3 §4-3).
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
@@ -29,7 +29,7 @@ _event_service = EventService()
 @router.get("/api/v1/cases/{case_id}/card", response_model=SuccessResponse)
 async def get_current_card(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get the current CaseCard for a case."""
     card = await _vm.get_current(db, case_id=case_id)
@@ -44,7 +44,7 @@ async def get_current_card(
 @router.get("/api/v1/cases/{case_id}/cards", response_model=SuccessResponse)
 async def get_all_cards(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get all CaseCard versions for a case."""
     cards = await _vm.get_all_versions(db, case_id=case_id)
@@ -57,7 +57,7 @@ async def get_all_cards(
 )
 async def mark_card_reviewed(
     card_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Mark a CaseCard as human-reviewed (SSOT-3 §4-3).
 
@@ -74,7 +74,7 @@ async def mark_card_reviewed(
             details={"card_id": str(card_id)},
         )
 
-    card.reviewed_at = datetime.now(timezone.utc)
+    card.reviewed_at = datetime.now(UTC)
     card.reviewed_by = "kaneko"
 
     # Record non-transition event

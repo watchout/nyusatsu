@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta, timezone
-from decimal import Decimal
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,7 +22,7 @@ async def _create_case(
 ) -> Case:
     """Create a test case."""
     deadline = (
-        datetime.now(timezone.utc) + timedelta(days=deadline_days)
+        datetime.now(UTC) + timedelta(days=deadline_days)
         if deadline_days is not None
         else None
     )

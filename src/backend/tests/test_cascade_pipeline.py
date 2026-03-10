@@ -3,7 +3,7 @@
 Tests happy path, partial failure, and ineligible/uncertain skip scenarios.
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
@@ -21,7 +21,7 @@ from app.services.judgment.judgment_service import JudgmentError
 from app.services.llm.mock import MockProvider
 from app.services.reading.reading_service import ReadingError
 
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 def _mock_card():

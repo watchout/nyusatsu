@@ -6,7 +6,7 @@ Tests GET /api/v1/cases/:id/events with filters and pagination.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from httpx import AsyncClient
@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.case import Case
 from app.models.case_event import CaseEvent
 
-_NOW = datetime.now(timezone.utc)
+_NOW = datetime.now(UTC)
 
 
 async def _create_case(db: AsyncSession) -> Case:

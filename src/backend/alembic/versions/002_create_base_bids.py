@@ -5,9 +5,10 @@ Revises: 001
 Create Date: 2026-02-20
 """
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB, UUID
+
+from alembic import op
 
 revision = "002"
 down_revision = "001"
@@ -34,7 +35,7 @@ def upgrade() -> None:
         sa.Column("imported_at", sa.TIMESTAMP(timezone=True), nullable=False, server_default=sa.text("NOW()")),
     )
     op.execute("COMMENT ON TABLE base_bids IS 'F-005 Layer 1: 調達ポータル落札実績OD由来のベースデータ'")
-    op.execute("COMMENT ON COLUMN base_bids.raw_data IS 'ODの元CSVを丸ごと保存。CSVスキーマ変更時はraw_dataから段階的にカラム昇格'")
+    op.execute("COMMENT ON COLUMN base_bids.raw_data IS 'ODの元CSVを丸ごと保存。CSVスキーマ変更時はraw_dataから段階的にカラム昇格'")  # noqa: E501
 
 
 def downgrade() -> None:

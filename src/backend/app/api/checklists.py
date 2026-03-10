@@ -7,7 +7,7 @@ Includes optimistic locking (TASK-35) and completion event.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -40,7 +40,7 @@ class AddItemRequest(BaseModel):
 @router.get("/cases/{case_id}/checklist", response_model=SuccessResponse)
 async def get_current_checklist(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get the current Checklist for a case."""
     checklist = await _vm.get_current(db, case_id=case_id)
@@ -55,7 +55,7 @@ async def get_current_checklist(
 @router.get("/cases/{case_id}/checklists", response_model=SuccessResponse)
 async def get_all_checklists(
     case_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Get all Checklist versions for a case."""
     checklists = await _vm.get_all_versions(db, case_id=case_id)
@@ -67,7 +67,7 @@ async def toggle_check_item(
     checklist_id: uuid.UUID,
     item_index: int,
     body: CheckItemRequest,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Toggle check/uncheck on a checklist item.
 
@@ -81,19 +81,18 @@ async def toggle_check_item(
         raise NotFoundError(message="Checklist not found")
 
     # --- Optimistic lock (TASK-35) ---
-    if body.expected_checklist_version is not None:
-        if body.expected_checklist_version != checklist.version:
-            raise ChecklistVersionMismatchError(
-                message=(
-                    f"Checklist version mismatch. "
-                    f"Expected {body.expected_checklist_version} "
-                    f"but found {checklist.version}."
-                ),
-                details={
-                    "expected": body.expected_checklist_version,
-                    "actual": checklist.version,
-                },
-            )
+    if body.expected_checklist_version is not None and body.expected_checklist_version != checklist.version:
+        raise ChecklistVersionMismatchError(
+            message=(
+                f"Checklist version mismatch. "
+                f"Expected {body.expected_checklist_version} "
+                f"but found {checklist.version}."
+            ),
+            details={
+                "expected": body.expected_checklist_version,
+                "actual": checklist.version,
+            },
+        )
 
     items = list(checklist.checklist_items)
     if item_index < 0 or item_index >= len(items):
@@ -114,7 +113,7 @@ async def toggle_check_item(
     # --- Completion event (TASK-35) ---
     if done == total and total > 0:
         checklist.status = "completed"
-        checklist.completed_at = datetime.now(timezone.utc)
+        checklist.completed_at = datetime.now(UTC)
 
         case = (
             await db.execute(select(Case).where(Case.id == checklist.case_id))
@@ -140,7 +139,7 @@ async def toggle_check_item(
 async def add_manual_item(
     checklist_id: uuid.UUID,
     body: AddItemRequest,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db),  # noqa: B008
 ):
     """Add a manual item to the checklist."""
     stmt = select(Checklist).where(Checklist.id == checklist_id)

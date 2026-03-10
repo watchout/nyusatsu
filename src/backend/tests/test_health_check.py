@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -46,7 +46,7 @@ def _make_batch_log(
         feature_origin=feature_origin,
         batch_type=batch_type,
         status=status,
-        started_at=started_at or datetime.now(timezone.utc),
+        started_at=started_at or datetime.now(UTC),
         total_fetched=10,
         new_count=5,
         updated_count=2,
@@ -86,7 +86,7 @@ def _make_event(
         triggered_by="system",
         actor_id="system",
         feature_origin="F-002",
-        created_at=created_at or datetime.now(timezone.utc),
+        created_at=created_at or datetime.now(UTC),
     )
 
 
@@ -159,7 +159,7 @@ class TestCircuitBreaker:
             case_id=case.id,
             event_type="llm_circuit_open",
             to_status="reading_failed",
-            created_at=datetime.now(timezone.utc) - timedelta(hours=1),
+            created_at=datetime.now(UTC) - timedelta(hours=1),
         )
         db.add(event)
         await db.flush()
@@ -179,7 +179,7 @@ class TestCircuitBreaker:
             case_id=case.id,
             event_type="llm_circuit_open",
             to_status="reading_failed",
-            created_at=datetime.now(timezone.utc) - timedelta(hours=25),
+            created_at=datetime.now(UTC) - timedelta(hours=25),
         )
         db.add(event)
         await db.flush()
@@ -204,7 +204,7 @@ class TestBatchFreshness:
         db.add(_make_batch_log(
             feature_origin="F-001",
             batch_type="case_fetch",
-            started_at=datetime.now(timezone.utc) - timedelta(hours=2),
+            started_at=datetime.now(UTC) - timedelta(hours=2),
         ))
         await db.flush()
 
@@ -217,7 +217,7 @@ class TestBatchFreshness:
         db.add(_make_batch_log(
             feature_origin="F-001",
             batch_type="case_fetch",
-            started_at=datetime.now(timezone.utc) - timedelta(hours=30),
+            started_at=datetime.now(UTC) - timedelta(hours=30),
         ))
         await db.flush()
 

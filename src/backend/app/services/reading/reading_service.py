@@ -17,6 +17,7 @@ import structlog
 
 from app.models.case_card import CaseCard
 from app.services.llm.base import LLMProvider
+from app.services.metrics.reading_metrics import ReadingMetrics
 from app.services.reading.document_fetcher import DocumentFetcher
 from app.services.reading.evidence_mapper import EvidenceMapper
 from app.services.reading.file_store import FileStore
@@ -24,7 +25,6 @@ from app.services.reading.llm_extractor import LLMExtractor
 from app.services.reading.quality_checker import QualityChecker
 from app.services.reading.scanned_detector import ScannedPdfDetector
 from app.services.reading.text_extractor import TextExtractor
-from app.services.metrics.reading_metrics import ReadingMetrics
 from app.services.version_manager import VersionManager
 
 if TYPE_CHECKING:

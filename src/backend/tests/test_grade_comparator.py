@@ -19,7 +19,6 @@ class TestGradeComparator:
 
     def test_all_16_combinations(self) -> None:
         """Exhaustive test of all grade pairs."""
-        grades = ["A", "B", "C", "D"]
         expected = {
             ("A", "A"): True, ("A", "B"): True, ("A", "C"): True, ("A", "D"): True,
             ("B", "A"): False, ("B", "B"): True, ("B", "C"): True, ("B", "D"): True,

@@ -1,22 +1,19 @@
 """Tests for ChecklistBatch (F-004)."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from unittest.mock import AsyncMock
-from uuid import uuid4
 
 import pytest
-from sqlalchemy import delete
 
 from app.models.case import Case
 from app.models.case_card import CaseCard
-from app.models.company_profile import CompanyProfile
 from app.models.eligibility_result import EligibilityResult
 from app.services.batch.checklist_batch import ChecklistBatch
 from app.services.batch.types import ItemStatus
 from app.services.checklist_gen.checklist_service import ChecklistError
 
-_NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
+_NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
 
 def _card_data() -> dict:

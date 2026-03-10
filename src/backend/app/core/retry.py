@@ -13,18 +13,17 @@ Usage:
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable
+from typing import Any
 
 import httpx
 import structlog
 from sqlalchemy.exc import OperationalError
 from tenacity import (
-    RetryError,
     retry,
     retry_if_exception_type,
     stop_after_attempt,
-    wait_fixed,
 )
 
 from app.core.constants import (

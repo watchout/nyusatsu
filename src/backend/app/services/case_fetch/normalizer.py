@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import unicodedata
 from dataclasses import dataclass
+from datetime import UTC
 from typing import Any
 
 from app.services.case_fetch.base_adapter import RawCase
@@ -79,14 +80,14 @@ class CaseNormalizer:
             data["grade"] = self._normalize_text(raw.grade)
         if raw.deadline:
             # Case model uses submission_deadline (TIMESTAMP)
-            from datetime import datetime, timezone
+            from datetime import datetime
             data["submission_deadline"] = datetime.combine(
-                raw.deadline, datetime.min.time(), tzinfo=timezone.utc,
+                raw.deadline, datetime.min.time(), tzinfo=UTC,
             )
         if raw.opening_date:
-            from datetime import datetime, timezone
+            from datetime import datetime
             data["opening_date"] = datetime.combine(
-                raw.opening_date, datetime.min.time(), tzinfo=timezone.utc,
+                raw.opening_date, datetime.min.time(), tzinfo=UTC,
             )
         if raw.detail_url:
             data["detail_url"] = raw.detail_url

@@ -12,8 +12,6 @@ from typing import Any
 
 import structlog
 
-from app.schemas.evidence import AssertionType
-
 logger = structlog.get_logger()
 
 # Fixed items always added to bid-time checklist

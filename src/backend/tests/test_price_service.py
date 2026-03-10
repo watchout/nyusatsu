@@ -75,7 +75,7 @@ async def _seed_bids(db: AsyncSession) -> list[BaseBid]:
         {"num_participants": 2, "budget_amount": 50_000_000, "winning_rate": Decimal("0.9000")},
     ]
 
-    for bid_data, det_data in zip(data_set, details_data):
+    for bid_data, det_data in zip(data_set, details_data, strict=False):
         bid = BaseBid(**bid_data)
         db.add(bid)
         await db.flush()

@@ -15,10 +15,11 @@ from __future__ import annotations
 
 import csv
 import io
+from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import structlog
 
@@ -136,17 +137,17 @@ class ODParser:
 
             if field_name == "source_id":
                 if not value:
-                    raise _RowParseError("source_id (案件番号) is empty")
+                    raise _RowParseError("source_id (案件番号) is empty")  # noqa: B904
                 data[field_name] = value
 
             elif field_name == "case_name":
                 if not value:
-                    raise _RowParseError("case_name (案件名称) is empty")
+                    raise _RowParseError("case_name (案件名称) is empty")  # noqa: B904
                 data[field_name] = value
 
             elif field_name == "issuing_org":
                 if not value:
-                    raise _RowParseError("issuing_org (発注機関) is empty")
+                    raise _RowParseError("issuing_org (発注機関) is empty")  # noqa: B904
                 data[field_name] = value
 
             elif field_name == "winning_amount":
@@ -178,9 +179,9 @@ class ODParser:
         try:
             amount = int(cleaned)
         except ValueError:
-            raise _RowParseError(f"Invalid amount: {value!r}")
+            raise _RowParseError(f"Invalid amount: {value!r}")  # noqa: B904
         if amount < 0:
-            raise _RowParseError(f"Negative amount: {value!r}")
+            raise _RowParseError(f"Negative amount: {value!r}")  # noqa: B904
         return amount
 
     @staticmethod
@@ -193,7 +194,7 @@ class ODParser:
                 return datetime.strptime(value, fmt).date()
             except ValueError:
                 continue
-        raise _RowParseError(f"Invalid date for {field_name}: {value!r}")
+        raise _RowParseError(f"Invalid date for {field_name}: {value!r}")  # noqa: B904
 
 
 class _RowParseError(Exception):

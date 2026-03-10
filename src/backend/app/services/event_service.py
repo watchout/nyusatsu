@@ -7,8 +7,7 @@ in the same transaction.
 
 from __future__ import annotations
 
-import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import structlog
@@ -55,18 +54,17 @@ class EventService:
         from_stage = case.current_lifecycle_stage
 
         # Step 1: Optimistic lock check
-        if expected_lifecycle_stage is not None:
-            if from_stage != expected_lifecycle_stage:
-                raise StageMismatchError(
-                    message=(
-                        f"Stage mismatch: expected {expected_lifecycle_stage}, "
-                        f"got {from_stage}"
-                    ),
-                    details={
-                        "expected": expected_lifecycle_stage,
-                        "actual": from_stage,
-                    },
-                )
+        if expected_lifecycle_stage is not None and from_stage != expected_lifecycle_stage:
+            raise StageMismatchError(
+                message=(
+                    f"Stage mismatch: expected {expected_lifecycle_stage}, "
+                    f"got {from_stage}"
+                ),
+                details={
+                    "expected": expected_lifecycle_stage,
+                    "actual": from_stage,
+                },
+            )
 
         # Step 2: Validate transition (raises InvalidTransitionError if invalid)
         event_type = self._lifecycle.validate_transition(from_stage, to_stage)
@@ -86,11 +84,11 @@ class EventService:
 
         # Step 4: Update case stage
         case.current_lifecycle_stage = to_stage
-        case.last_updated_at = datetime.now(timezone.utc)
+        case.last_updated_at = datetime.now(UTC)
 
         # Set archived_at for archive transitions
         if to_stage == "archived":
-            case.archived_at = datetime.now(timezone.utc)
+            case.archived_at = datetime.now(UTC)
 
         await db.flush()
         await db.refresh(event)

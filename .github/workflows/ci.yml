@@ -18,7 +18,7 @@ jobs:
           version: "latest"
       - name: Install dependencies
         working-directory: src/backend
-        run: uv sync --dev
+        run: uv sync --extra dev
       - name: Lint
         working-directory: src/backend
         run: uv run ruff check .
@@ -55,7 +55,7 @@ jobs:
           version: "latest"
       - name: Install dependencies
         working-directory: src/backend
-        run: uv sync --dev
+        run: uv sync --extra dev
       - name: Run migrations
         working-directory: src/backend
         run: uv run python -m alembic upgrade head

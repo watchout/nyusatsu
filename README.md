@@ -69,3 +69,15 @@
 - **根拠提示**：抽出結果は、必ず「根拠箇所（URL/ページ/見出し）」を保持
 - **安全設計**：要約は断定しない（原文確認導線を必須）
 - **失敗前提**：取得失敗・構造変更・重複を前提に、リトライ/差分/重複排除を実装
+
+## 開発プロセス
+
+### CI/CD パイプライン
+- **CI**: Backend Lint (ruff) + Backend Tests (pytest) + Frontend Lint & Type Check + Docker Build
+- **Final Audit**: CI通過後の最終品質チェック（SSOT準拠確認 + 破壊的変更検出）
+- **Merge Notify**: Final Audit合格時にTelegram通知
+
+### 品質基準
+- SSOT準拠（PRD、アーキテクチャドキュメント必須）
+- 省略コメント禁止（`# ...` / `// ...` による実装スキップ防止）
+- 破壊的変更の明示（Alembicマイグレーション、API変更、ENV変更）

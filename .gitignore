@@ -32,3 +32,8 @@ logs/*
 .DS_Store
 
 # === uv ===
+
+# AI Development Framework artifacts
+.framework/audits/
+.framework/feedback/
+docs/audits/

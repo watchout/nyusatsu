@@ -1,0 +1,79 @@
+name: Merge Notify
+
+on:
+  workflow_run:
+    workflows: ["Final Audit"]
+    types: [completed]
+
+jobs:
+  notify:
+    name: Telegram — マージ承認要求
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Find PR with audit-passed label
+        id: find_pr
+        run: |
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          PR_NUMBER=$(gh pr list \
+            --repo "${{ github.repository }}" \
+            --head "$BRANCH" \
+            --json number,labels \
+            --jq '.[] | select(.labels[].name == "audit-passed") | .number' | head -1)
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No audit-passed PR found — skipping notification"
+            echo "pr_number=" >> "$GITHUB_OUTPUT"
+          else
+            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Get PR details
+        id: pr_details
+        if: steps.find_pr.outputs.pr_number != ''
+        run: |
+          PR="${{ steps.find_pr.outputs.pr_number }}"
+          PR_DATA=$(gh pr view "$PR" \
+            --repo "${{ github.repository }}" \
+            --json title,url,headRefName,body)
+
+          TITLE=$(echo "$PR_DATA" | jq -r '.title')
+          URL=$(echo "$PR_DATA" | jq -r '.url')
+          BRANCH=$(echo "$PR_DATA" | jq -r '.headRefName')
+
+          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Send Telegram notification
+        if: steps.find_pr.outputs.pr_number != ''
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          PR="${{ steps.find_pr.outputs.pr_number }}"
+          TITLE="${{ steps.pr_details.outputs.title }}"
+          URL="${{ steps.pr_details.outputs.url }}"
+          BRANCH="${{ steps.pr_details.outputs.branch }}"
+          REPO="${{ github.repository }}"
+
+          MESSAGE="✅ *Final Audit 合格 — マージ承認をお願いします*
+
+📋 *PR #${PR}*: ${TITLE}
+🌿 Branch: \`${BRANCH}\`
+🔗 ${URL}
+
+*監査結果*
+✅ Phase 1: SSOT準拠確認
+✅ Phase 2: 破壊的変更チェック
+
+GitHub で Approve → Squash \& Merge をお願いします。"
+
+          curl -s -X POST \
+            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d parse_mode="Markdown" \
+            -d text="$MESSAGE" \
+            -d disable_web_page_preview="true"

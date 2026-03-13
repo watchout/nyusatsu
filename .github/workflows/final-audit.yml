@@ -1,0 +1,268 @@
+name: Final Audit
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+jobs:
+  # ============================================================
+  # Guard: CI must have passed, not on main branch
+  # ============================================================
+  guard:
+    name: Guard — CI passed & not main branch
+    runs-on: ubuntu-latest
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch != 'main'
+    outputs:
+      pr_number: ${{ steps.find_pr.outputs.pr_number }}
+      skip: ${{ steps.check_hold.outputs.skip }}
+    steps:
+      - name: Find associated PR
+        id: find_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          PR_NUMBER=$(gh pr list \
+            --repo "${{ github.repository }}" \
+            --head "$BRANCH" \
+            --json number \
+            --jq '.[0].number // empty')
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No PR found for branch $BRANCH — skipping"
+            echo "pr_number=" >> "$GITHUB_OUTPUT"
+          else
+            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check hold label
+        id: check_hold
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR="${{ steps.find_pr.outputs.pr_number }}"
+          if [ -z "$PR" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          LABELS=$(gh pr view "$PR" \
+            --repo "${{ github.repository }}" \
+            --json labels \
+            --jq '.labels[].name')
+          if echo "$LABELS" | grep -q "^hold$"; then
+            echo "PR #$PR has 'hold' label — skipping Final Audit"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ============================================================
+  # Phase 1: SSOT準拠最終確認
+  # ============================================================
+  phase1-ssot:
+    name: "Phase 1: SSOT準拠確認"
+    runs-on: ubuntu-latest
+    needs: guard
+    if: needs.guard.outputs.skip == 'false' && needs.guard.outputs.pr_number != ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Phase 1 — SSOT Compliance + Ellipsis Check
+        id: ssot_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR="${{ needs.guard.outputs.pr_number }}"
+          
+          # 1. Check for required SSOT documents
+          REQUIRED_DOCS=(
+            "docs/business/PRD.md"
+            "docs/design/ARCHITECTURE.md"
+          )
+          
+          MISSING_DOCS=""
+          for doc in "${REQUIRED_DOCS[@]}"; do
+            if [ ! -f "$doc" ]; then
+              MISSING_DOCS="$MISSING_DOCS\n  - $doc"
+            fi
+          done
+          
+          if [ -n "$MISSING_DOCS" ]; then
+            echo "❌ Missing required SSOT documents:$MISSING_DOCS"
+            echo "phase1_result=fail" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          
+          # 2. Check for ellipsis comments (# ...) in changed Python files
+          CHANGED_FILES=$(gh pr view "$PR" \
+            --repo "${{ github.repository }}" \
+            --json files \
+            --jq '.files[] | select(.path | endswith(".py")) | .path')
+          
+          ELLIPSIS_COUNT=0
+          ELLIPSIS_FILES=""
+          
+          while IFS= read -r file; do
+            if [ ! -f "$file" ]; then continue; fi
+            
+            COUNT=$(grep -c '#\s*\.\.\.' "$file" || echo "0")
+            if [ "$COUNT" -gt 0 ]; then
+              ELLIPSIS_COUNT=$((ELLIPSIS_COUNT + COUNT))
+              ELLIPSIS_FILES="$ELLIPSIS_FILES\n  - $file: $COUNT occurrences"
+            fi
+          done <<< "$CHANGED_FILES"
+          
+          # Check TypeScript files too
+          CHANGED_TS=$(gh pr view "$PR" \
+            --repo "${{ github.repository }}" \
+            --json files \
+            --jq '.files[] | select(.path | endswith(".ts") or endswith(".tsx")) | .path')
+          
+          while IFS= read -r file; do
+            if [ ! -f "$file" ]; then continue; fi
+            
+            COUNT=$(grep -c '//\s*\.\.\.' "$file" || echo "0")
+            if [ "$COUNT" -gt 0 ]; then
+              ELLIPSIS_COUNT=$((ELLIPSIS_COUNT + COUNT))
+              ELLIPSIS_FILES="$ELLIPSIS_FILES\n  - $file: $COUNT occurrences"
+            fi
+          done <<< "$CHANGED_TS"
+          
+          if [ "$ELLIPSIS_COUNT" -gt 0 ]; then
+            echo "❌ Found $ELLIPSIS_COUNT ellipsis comments (# ... / // ...) in changed files:$ELLIPSIS_FILES"
+            echo "Ellipsis comments indicate incomplete implementation (SSOT violation)"
+            echo "phase1_result=fail" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          
+          echo "✅ Phase 1: SSOT compliance + No ellipsis comments"
+          echo "phase1_result=pass" >> "$GITHUB_OUTPUT"
+
+  # ============================================================
+  # Phase 2: 破壊的変更チェック
+  # ============================================================
+  phase2-breaking:
+    name: "Phase 2: 破壊的変更チェック"
+    runs-on: ubuntu-latest
+    needs: [guard, phase1-ssot]
+    if: needs.guard.outputs.skip == 'false' && needs.guard.outputs.pr_number != ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Phase 2 — Breaking Change Detection
+        id: breaking_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR="${{ needs.guard.outputs.pr_number }}"
+
+          # Check PR body for breaking change declaration
+          PR_BODY=$(gh pr view "$PR" \
+            --repo "${{ github.repository }}" \
+            --json body --jq '.body')
+
+          BREAKING_DECLARED=$(echo "$PR_BODY" | grep -ci "breaking.change\|破壊的変更" || true)
+
+          # Check for Alembic migration changes
+          MIGRATION_CHANGED=$(git diff origin/main...HEAD -- \
+            "**/alembic/versions/**" \
+            --name-only 2>/dev/null | wc -l || echo "0")
+
+          # Check for API schema changes
+          API_CHANGED=$(git diff origin/main...HEAD -- \
+            "**/openapi.json" "**/schema/**" "src/backend/app/api/**" \
+            --name-only 2>/dev/null | wc -l || echo "0")
+
+          # Check for env var changes
+          ENV_CHANGED=$(git diff origin/main...HEAD -- \
+            ".env.example" "**/.env.example" \
+            --name-only 2>/dev/null | wc -l || echo "0")
+
+          echo "Migration changes: $MIGRATION_CHANGED, API changes: $API_CHANGED, ENV changes: $ENV_CHANGED"
+          echo "Breaking declared in PR: $BREAKING_DECLARED"
+
+          # If potentially breaking but not declared → fail
+          TOTAL_RISK=$((MIGRATION_CHANGED + API_CHANGED + ENV_CHANGED))
+          if [ "$TOTAL_RISK" -gt 0 ] && [ "$BREAKING_DECLARED" -eq 0 ]; then
+            echo "⚠️  Breaking changes detected but not declared in PR body."
+            echo "Please add 'Breaking Change: <description>' to the PR body."
+            exit 1
+          fi
+
+          echo "✅ Phase 2 passed"
+
+  # ============================================================
+  # Final: 全フェーズ合格 → ラベル付与 + PR コメント
+  # ============================================================
+  audit-complete:
+    name: Audit Complete
+    runs-on: ubuntu-latest
+    needs: [guard, phase1-ssot, phase2-breaking]
+    if: always() && needs.guard.outputs.pr_number != ''
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Evaluate audit results
+        id: evaluate
+        run: |
+          P1="${{ needs.phase1-ssot.result }}"
+          P2="${{ needs.phase2-breaking.result }}"
+
+          if [[ "$P1" == "success" && "$P2" == "success" ]]; then
+            echo "result=pass" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=fail" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Label PR (pass)
+        if: steps.evaluate.outputs.result == 'pass'
+        run: |
+          PR="${{ needs.guard.outputs.pr_number }}"
+          gh pr edit "$PR" \
+            --repo "${{ github.repository }}" \
+            --add-label "audit-passed" \
+            --remove-label "audit-failed" || true
+
+      - name: Label PR (fail)
+        if: steps.evaluate.outputs.result == 'fail'
+        run: |
+          PR="${{ needs.guard.outputs.pr_number }}"
+          gh pr edit "$PR" \
+            --repo "${{ github.repository }}" \
+            --add-label "audit-failed" \
+            --remove-label "audit-passed" || true
+
+      - name: Comment on PR
+        run: |
+          PR="${{ needs.guard.outputs.pr_number }}"
+          RESULT="${{ steps.evaluate.outputs.result }}"
+          P1="${{ needs.phase1-ssot.result }}"
+          P2="${{ needs.phase2-breaking.result }}"
+
+          if [ "$RESULT" = "pass" ]; then
+            EMOJI="✅"
+            SUMMARY="**最終監査: 全フェーズ合格**\n\nマージ承認をお願いします。\n\n※ コード品質チェック（Lint、テスト、型チェック、Docker Build）は CI で検証済みです。"
+          else
+            EMOJI="❌"
+            SUMMARY="**最終監査: 不合格**\n\n修正後に再プッシュしてください。"
+          fi
+
+          gh pr comment "$PR" \
+            --repo "${{ github.repository }}" \
+            --body "## $EMOJI Final Audit 結果
+
+          | Phase | 内容 | 結果 |
+          |-------|------|------|
+          | Phase 1 | SSOT準拠 + 省略コメント検出 | $( [ "$P1" = "success" ] && echo "✅ Pass" || echo "❌ Fail" ) |
+          | Phase 2 | 破壊的変更チェック | $( [ "$P2" = "success" ] && echo "✅ Pass" || echo "❌ Fail" ) |
+
+          $SUMMARY"

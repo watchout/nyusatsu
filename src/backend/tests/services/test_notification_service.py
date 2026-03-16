@@ -299,66 +299,11 @@ class TestNotificationService:
 
 
 class TestTelegramBotClient:
-    """Test TelegramBotClient."""
+    """Test TelegramBotClient (old tests for old httpx API - removed)."""
 
-    @pytest.mark.asyncio
-    async def test_send_message_success(self):
-        """Test successful message send."""
-        with patch("app.services.notifications.telegram_bot.httpx.AsyncClient") as mock_client_class:
-            mock_response = MagicMock()
-            mock_response.json.return_value = {
-                "ok": True,
-                "result": {"message_id": 123},
-            }
-            mock_client = AsyncMock()
-            mock_client.post.return_value = mock_response
-            mock_client_class.return_value = mock_client
-
-            client = TelegramBotClient("test_token", "test_chat_id")
-            result = await client.send_message("Test message")
-
-            assert result == {"message_id": 123}
-            mock_client.post.assert_called_once()
-
-            await client.close()
-
-    @pytest.mark.asyncio
-    async def test_send_message_api_error(self):
-        """Test handling of Telegram API errors."""
-        with patch("app.services.notifications.telegram_bot.httpx.AsyncClient") as mock_client_class:
-            mock_response = MagicMock()
-            mock_response.json.return_value = {
-                "ok": False,
-                "description": "Invalid chat_id",
-            }
-            mock_response.raise_for_status.side_effect = None
-            mock_client = AsyncMock()
-            mock_client.post.return_value = mock_response
-            mock_client_class.return_value = mock_client
-
-            client = TelegramBotClient("test_token", "invalid_id")
-
-            with pytest.raises(ValueError, match="Telegram API error"):
-                await client.send_message("Test message")
-
-            await client.close()
-
-    @pytest.mark.asyncio
-    async def test_send_message_network_error(self):
-        """Test handling of network errors."""
-        import httpx
-
-        with patch("app.services.notifications.telegram_bot.httpx.AsyncClient") as mock_client_class:
-            mock_client = AsyncMock()
-            mock_client.post.side_effect = httpx.RequestError("Network error")
-            mock_client_class.return_value = mock_client
-
-            client = TelegramBotClient("test_token", "test_chat_id")
-
-            with pytest.raises(httpx.RequestError):
-                await client.send_message("Test message")
-
-            await client.close()
+    # These tests were written for an older httpx-based implementation
+    # and are now superseded by tests in test_telegram_bot.py which use
+    # the new python-telegram-bot library approach.
 
 
 class TestGetNotificationService:

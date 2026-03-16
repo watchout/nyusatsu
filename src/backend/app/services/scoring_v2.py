@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.services.price_analysis import PriceAnalyzer
+from app.services.price_analysis import PriceAnalyzer  # F-005 integration
 
 if TYPE_CHECKING:
     from app.models import Case

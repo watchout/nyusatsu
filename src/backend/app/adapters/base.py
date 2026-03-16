@@ -1,9 +1,16 @@
 """
 BaseSourceAdapter - データソースアダプターの基底クラス
 """
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.case import Case
 
 
 @dataclass
@@ -114,7 +121,7 @@ class BaseSourceAdapter(ABC):
         
         return result
     
-    def _has_changes(self, existing: 'Case', new: dict) -> bool:
+    def _has_changes(self, existing: Case, new: dict) -> bool:
         """変更があるかチェック"""
         compare_fields = ['case_name', 'submission_deadline', 'opening_date']
         return any(getattr(existing, field) != new.get(field) for field in compare_fields)

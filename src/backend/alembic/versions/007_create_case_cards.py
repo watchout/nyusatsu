@@ -10,8 +10,8 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 
 from alembic import op
 
-revision = "006"
-down_revision = "003"
+revision = "007"
+down_revision = "006"
 branch_labels = None
 depends_on = None
 

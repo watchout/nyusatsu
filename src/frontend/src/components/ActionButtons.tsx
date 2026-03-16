@@ -12,7 +12,6 @@ import { isProcessingStage, type LifecycleStage } from '../types/enums';
 
 interface ActionButtonsProps {
   stage: LifecycleStage;
-  verdict?: string | null;
   onAction: (action: string) => void;
   disabled?: boolean;
 }
@@ -102,7 +101,6 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
 
 export default function ActionButtons({
   stage,
-  verdict: _verdict,
   onAction,
   disabled: externalDisabled = false,
 }: ActionButtonsProps) {

@@ -104,11 +104,13 @@ export default function CaseDetail() {
     [id, loadCase],
   );
 
+  const checklistId = caseData?.checklist?.id;
+
   const handleToggleItem = useCallback(
     async (itemId: string, checked: boolean) => {
-      if (!id || !caseData?.checklist) return;
+      if (!id || !checklistId) return;
       try {
-        await patchJson(`/checklists/${caseData.checklist.id}/items/${itemId}`, {
+        await patchJson(`/checklists/${checklistId}/items/${itemId}`, {
           is_checked: checked,
         });
         await loadCase();
@@ -116,7 +118,7 @@ export default function CaseDetail() {
         console.error('Toggle failed:', err);
       }
     },
-    [id, caseData?.checklist, loadCase],
+    [id, checklistId, loadCase],
   );
 
   if (loading && !caseData) {

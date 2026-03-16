@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.models.case import Case
-from app.database import get_db
+from app.core.database import get_db
 from sqlalchemy import select
 
 

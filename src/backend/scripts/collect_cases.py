@@ -12,8 +12,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.adapters.chotatku_portal import ChotatkuPortalAdapter
 from app.services.scoring import add_score_to_cases
 from app.models.batch_log import BatchLog
-from app.database import get_db
-from datetime import datetime
+from app.core.database import get_db
+from datetime import datetime, timezone
 
 
 async def main():
@@ -25,7 +25,9 @@ async def main():
     # バッチログ作成
     batch_log = BatchLog(
         source=adapter.source_name,
-        started_at=datetime.utcnow(),
+        feature_origin="F-001",
+        batch_type="case_collection",
+        started_at=datetime.now(timezone.utc),
         status="running",
     )
     
@@ -85,7 +87,7 @@ async def main():
             print(f"  → {len(scored_cases)}件にスコア付与")
         
         # バッチログ更新
-        batch_log.finished_at = datetime.utcnow()
+        batch_log.finished_at = datetime.now(timezone.utc)
         batch_log.status = "success"
         batch_log.total_fetched = len(raw_cases)
         batch_log.new_count = store_result.new
@@ -102,7 +104,7 @@ async def main():
         
     except Exception as e:
         print(f"エラー: {e}")
-        batch_log.finished_at = datetime.utcnow()
+        batch_log.finished_at = datetime.now(timezone.utc)
         batch_log.status = "failed"
         batch_log.error_details = [{"error": str(e)}]
         

@@ -2,7 +2,7 @@
 簡易スコアリングサービス（MVP）
 期限余裕のみでスコアリング
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 def calculate_simple_score(case: dict) -> int:
@@ -14,7 +14,11 @@ def calculate_simple_score(case: dict) -> int:
     if isinstance(deadline, str):
         deadline = datetime.fromisoformat(deadline)
     
-    now = datetime.utcnow()
+    # timezone-aware datetime に統一
+    if deadline.tzinfo is None:
+        deadline = deadline.replace(tzinfo=timezone.utc)
+    
+    now = datetime.now(timezone.utc)
     days_left = (deadline - now).days
     
     # 期限余裕でスコアリング

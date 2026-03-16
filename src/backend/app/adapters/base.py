@@ -56,7 +56,7 @@ class BaseSourceAdapter(ABC):
     
     async def store(self, cases: List[RawCase]) -> StoreResult:
         """DB格納（UPSERT + 差分検知）"""
-        from app.database import get_db
+        from app.core.database import get_db
         from app.models.case import Case
         from sqlalchemy import select
         from sqlalchemy.dialects.postgresql import insert

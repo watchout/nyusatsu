@@ -8,9 +8,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.models.case import Case
-from app.core.database import get_db
 from sqlalchemy import select
+
+from app.core.database import get_db
+from app.models.case import Case
 
 
 async def main():

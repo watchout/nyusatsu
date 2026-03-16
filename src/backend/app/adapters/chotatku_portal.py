@@ -2,10 +2,7 @@
 ChotatkuPortalAdapter - 調達ポータル公告収集
 最小MVP: HTMLスクレイピング + 基本フィルタリング
 """
-import httpx
 from datetime import datetime
-from typing import List
-from bs4 import BeautifulSoup
 
 from .base import BaseSourceAdapter, RawCase
 
@@ -19,7 +16,7 @@ class ChotatkuPortalAdapter(BaseSourceAdapter):
         super().__init__("chotatku_portal")
         self.keywords = ["軽運送", "配送", "物品", "清掃", "内装"]
     
-    async def fetch(self) -> List[RawCase]:
+    async def fetch(self) -> list[RawCase]:
         """調達ポータルから案件取得（MVP: モックデータ）"""
         # TODO: 実際のスクレイピング実装
         # Phase1では調達ポータルのHTML構造調査が必要
@@ -97,7 +94,7 @@ class ChotatkuPortalAdapter(BaseSourceAdapter):
             "raw_data": raw.raw_dict or {},
         }
     
-    def filter_cases(self, cases: List[RawCase]) -> List[RawCase]:
+    def filter_cases(self, cases: list[RawCase]) -> list[RawCase]:
         """キーワードフィルタリング（MVP: 簡易版）"""
         filtered = []
         

@@ -4,7 +4,6 @@ BaseSourceAdapter - データソースアダプターの基底クラス
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
 
 @dataclass
@@ -13,18 +12,18 @@ class RawCase:
     source_id: str
     case_name: str
     issuing_org: str
-    submission_deadline: Optional[datetime] = None
-    opening_date: Optional[datetime] = None
-    spec_url: Optional[str] = None
-    notice_url: Optional[str] = None
-    detail_url: Optional[str] = None
-    bid_type: Optional[str] = None
-    category: Optional[str] = None
-    region: Optional[str] = None
-    grade: Optional[str] = None
-    issuing_org_code: Optional[str] = None
-    raw_html: Optional[str] = None
-    raw_dict: Optional[dict] = None
+    submission_deadline: datetime | None = None
+    opening_date: datetime | None = None
+    spec_url: str | None = None
+    notice_url: str | None = None
+    detail_url: str | None = None
+    bid_type: str | None = None
+    category: str | None = None
+    region: str | None = None
+    grade: str | None = None
+    issuing_org_code: str | None = None
+    raw_html: str | None = None
+    raw_dict: dict | None = None
 
 
 @dataclass
@@ -35,7 +34,7 @@ class StoreResult:
     updated: int
     unchanged: int
     errors: int
-    error_details: List[dict]
+    error_details: list[dict]
 
 
 class BaseSourceAdapter(ABC):
@@ -45,7 +44,7 @@ class BaseSourceAdapter(ABC):
         self.source_name = source_name
     
     @abstractmethod
-    async def fetch(self) -> List[RawCase]:
+    async def fetch(self) -> list[RawCase]:
         """データソースからデータ取得"""
         pass
     
@@ -54,12 +53,13 @@ class BaseSourceAdapter(ABC):
         """統一スキーマに変換"""
         pass
     
-    async def store(self, cases: List[RawCase]) -> StoreResult:
+    async def store(self, cases: list[RawCase]) -> StoreResult:
         """DB格納（UPSERT + 差分検知）"""
-        from app.core.database import get_db
-        from app.models.case import Case
         from sqlalchemy import select
         from sqlalchemy.dialects.postgresql import insert
+
+        from app.core.database import get_db
+        from app.models.case import Case
         
         result = StoreResult(
             total=len(cases),
@@ -117,7 +117,4 @@ class BaseSourceAdapter(ABC):
     def _has_changes(self, existing: 'Case', new: dict) -> bool:
         """変更があるかチェック"""
         compare_fields = ['case_name', 'submission_deadline', 'opening_date']
-        for field in compare_fields:
-            if getattr(existing, field) != new.get(field):
-                return True
-        return False
+        return any(getattr(existing, field) != new.get(field) for field in compare_fields)

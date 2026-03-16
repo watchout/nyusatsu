@@ -4,16 +4,16 @@
 """
 import asyncio
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 # プロジェクトルートをPythonパスに追加
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.adapters.chotatku_portal import ChotatkuPortalAdapter
-from app.services.scoring import add_score_to_cases
-from app.models.batch_log import BatchLog
 from app.core.database import get_db
-from datetime import datetime, timezone
+from app.models.batch_log import BatchLog
+from app.services.scoring import add_score_to_cases
 
 
 async def main():
@@ -27,7 +27,7 @@ async def main():
         source=adapter.source_name,
         feature_origin="F-001",
         batch_type="case_collection",
-        started_at=datetime.now(timezone.utc),
+        started_at=datetime.now(UTC),
         status="running",
     )
     
@@ -52,8 +52,9 @@ async def main():
         
         # 4. スコアリング
         print("[4/4] スコアリング中...")
-        from app.models.case import Case
         from sqlalchemy import select, update
+
+        from app.models.case import Case
         
         async for db in get_db():
             # 全アクティブ案件取得
@@ -87,7 +88,7 @@ async def main():
             print(f"  → {len(scored_cases)}件にスコア付与")
         
         # バッチログ更新
-        batch_log.finished_at = datetime.now(timezone.utc)
+        batch_log.finished_at = datetime.now(UTC)
         batch_log.status = "success"
         batch_log.total_fetched = len(raw_cases)
         batch_log.new_count = store_result.new
@@ -104,7 +105,7 @@ async def main():
         
     except Exception as e:
         print(f"エラー: {e}")
-        batch_log.finished_at = datetime.now(timezone.utc)
+        batch_log.finished_at = datetime.now(UTC)
         batch_log.status = "failed"
         batch_log.error_details = [{"error": str(e)}]
         

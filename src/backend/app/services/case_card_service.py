@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.case import Case
 from app.models.case_card import CaseCard
-from app.services.llm.factory import get_llm_provider
+from app.services.llm import get_llm_provider
 from app.services.reading.reading_service import ReadingService
 from app.services.version_manager import VersionManager
 

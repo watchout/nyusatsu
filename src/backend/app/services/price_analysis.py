@@ -11,16 +11,15 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Any
 
 import structlog
-from sqlalchemy import select, func, and_, desc
+from sqlalchemy import and_, desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.price_history import PriceHistory, SuccessfulBids
-from app.models.base_bid import BaseBid
 
 logger = structlog.get_logger()
 
@@ -83,7 +82,7 @@ class PriceAnalyzer:
     async def analyze_price_for_case(
         self,
         case_id: str,
-        category: Optional[str] = None,
+        category: str | None = None,
         days_lookback: int = 180,
     ) -> dict[str, Any]:
         """案件に対する相場分析。
@@ -107,7 +106,7 @@ class PriceAnalyzer:
             }
         """
         # Get historical winning bids for this case
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days_lookback)
+        cutoff_date = datetime.now(UTC) - timedelta(days=days_lookback)
         
         stmt = (
             select(
@@ -210,12 +209,6 @@ class PriceAnalyzer:
         budgeted = Decimal(str(price_data.get("budgeted_price", 0)))
         winning = Decimal(str(price_data.get("winning_bid", 0)))
 
-        # Calculate price difference rate
-        if budgeted and budgeted > 0:
-            diff_rate = ((winning - budgeted) / budgeted * 100)
-        else:
-            diff_rate = Decimal(0)
-
         history = PriceHistory(
             case_id=case_id,
             asking_price=budgeted,
@@ -226,7 +219,7 @@ class PriceAnalyzer:
             data_source=price_data.get("data_source"),
             currency="JPY",
             confidence_score=Decimal(price_data.get("confidence_score", 0.80)),
-            recorded_at=price_data.get("recorded_at", datetime.now(timezone.utc)),
+            recorded_at=price_data.get("recorded_at", datetime.now(UTC)),
             notes=price_data.get("notes"),
         )
 
@@ -255,7 +248,7 @@ class PriceAnalyzer:
                 "max_price": Optional[Decimal],
             }
         """
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days_lookback)
+        cutoff_date = datetime.now(UTC) - timedelta(days=days_lookback)
 
         stmt = (
             select(
@@ -362,7 +355,7 @@ class PriceAnalyzer:
 
     def _calculate_price_score(
         self,
-        avg_price: Optional[Decimal],
+        avg_price: Decimal | None,
         variance_rate: Decimal,
         competition_index: Decimal,
     ) -> int:

@@ -4,11 +4,10 @@ from datetime import UTC, datetime
 from typing import Any
 
 import structlog
-from sqlalchemy.ext.asyncio import AsyncSession
+from app.services.notifications.telegram_bot import TelegramBotClient
 
 from app.core.config import settings
 from app.models.case import Case
-from app.services.notifications.telegram_bot import TelegramBotClient
 
 logger = structlog.get_logger()
 

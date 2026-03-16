@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DECIMAL, TIMESTAMP, ForeignKey, Index, Integer, String, Text, UniqueConstraint, text
+from sqlalchemy import DECIMAL, TIMESTAMP, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -39,8 +39,16 @@ class PriceHistory(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     highest_bid: Mapped[float] = mapped_column(DECIMAL(15, 2), nullable=True)
 
     # Metadata
-    source: Mapped[str] = mapped_column(String(50), nullable=False, comment="相場情報の出典 (public_data, internal, external_partner)")
-    data_source: Mapped[str] = mapped_column(String(255), nullable=True, comment="具体的なデータソース (URL、システム名など)")
+    source: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        comment="相場情報の出典 (public_data, internal, external_partner)",
+    )
+    data_source: Mapped[str] = mapped_column(
+        String(255),
+        nullable=True,
+        comment="具体的なデータソース (URL、システム名など)",
+    )
     currency: Mapped[str] = mapped_column(String(3), default="JPY", nullable=False)
     confidence_score: Mapped[float] = mapped_column(DECIMAL(3, 2), nullable=True, comment="データ信頼度 (0.00-1.00)")
 

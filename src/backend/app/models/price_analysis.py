@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import DECIMAL, TIMESTAMP, Integer, String, literal_column, text
+from sqlalchemy import DECIMAL, TIMESTAMP, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base

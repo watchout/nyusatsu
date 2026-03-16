@@ -29,7 +29,6 @@ async def _create_test_case(db: AsyncSession, suffix: str = "001") -> Case:
         case_name=f"Test Case {suffix}",
         issuing_org="Test Org",
         current_lifecycle_stage="reading_completed",
-        notice_html="<html>Test notice</html>",
     )
     db.add(case)
     await db.flush()

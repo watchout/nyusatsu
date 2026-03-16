@@ -9,6 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.models.case import Case
 from app.services.notifications.telegram_bot import TelegramBotClient
+from app.services.notifications.slack_bot import SlackBotClient
+from app.services.notifications.slack_notifier import SlackNotifier
 
 logger = structlog.get_logger()
 
@@ -163,15 +165,19 @@ class NotificationService:
     def __init__(
         self,
         telegram_bot: TelegramBotClient | None = None,
+        slack_bot: SlackBotClient | None = None,
         score_threshold: int = DEFAULT_SCORE_THRESHOLD,
     ):
         """Initialize notification service.
 
         Args:
             telegram_bot: TelegramBotClient instance (can be None for testing)
+            slack_bot: SlackBotClient instance (can be None for testing)
             score_threshold: Score threshold for high-priority notifications (0-100)
         """
         self.telegram_bot = telegram_bot
+        self.slack_bot = slack_bot
+        self.slack_notifier = SlackNotifier(slack_bot=slack_bot, score_threshold=score_threshold)
         self.score_threshold = max(0, min(100, score_threshold))
         self.formatter = NotificationFormatter()
 
@@ -184,7 +190,7 @@ class NotificationService:
         Returns:
             True if notification sent successfully
         """
-        if not self.telegram_bot or case.score is None:
+        if case.score is None:
             return False
 
         if case.score < self.score_threshold:
@@ -196,24 +202,42 @@ class NotificationService:
             )
             return False
 
-        try:
-            message = self.formatter.format_high_score_notification(case)
-            await self.telegram_bot.send_message(message)
+        results = []
 
+        # Send via Telegram if available
+        if self.telegram_bot:
+            try:
+                message = self.formatter.format_high_score_notification(case)
+                result = await self.telegram_bot.send_message(message)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "telegram_high_score_notification_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
+
+        # Send via Slack if available
+        if self.slack_bot:
+            try:
+                result = await self.slack_notifier.notify_high_score_case(case)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "slack_high_score_notification_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
+
+        if results:
             logger.info(
                 "high_score_notification_sent",
                 case_id=str(case.id),
                 score=case.score,
+                channels=len(results),
             )
-            return True
-
-        except Exception as e:
-            logger.error(
-                "high_score_notification_failed",
-                case_id=str(case.id),
-                error=str(e),
-            )
-            return False
+            return any(results)
+        return False
 
     async def notify_deadline_warning(self, case: Case, days_left: int) -> bool:
         """Send notification for approaching deadline.
@@ -225,31 +249,46 @@ class NotificationService:
         Returns:
             True if notification sent successfully
         """
-        if not self.telegram_bot:
-            return False
-
         # Only notify if deadline is within 7 days
         if days_left > 7 or days_left < 0:
             return False
 
-        try:
-            message = self.formatter.format_deadline_warning(case, days_left)
-            await self.telegram_bot.send_message(message)
+        results = []
 
+        # Send via Telegram if available
+        if self.telegram_bot:
+            try:
+                message = self.formatter.format_deadline_warning(case, days_left)
+                result = await self.telegram_bot.send_message(message)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "telegram_deadline_warning_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
+
+        # Send via Slack if available
+        if self.slack_bot:
+            try:
+                result = await self.slack_notifier.notify_deadline_warning(case, days_left)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "slack_deadline_warning_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
+
+        if results:
             logger.info(
                 "deadline_warning_sent",
                 case_id=str(case.id),
                 days_left=days_left,
+                channels=len(results),
             )
-            return True
-
-        except Exception as e:
-            logger.error(
-                "deadline_warning_failed",
-                case_id=str(case.id),
-                error=str(e),
-            )
-            return False
+            return any(results)
+        return False
 
     async def notify_batch_summary(
         self,
@@ -267,31 +306,49 @@ class NotificationService:
         Returns:
             True if notification sent successfully
         """
-        if not self.telegram_bot:
-            return False
+        results = []
 
-        try:
-            message = self.formatter.format_batch_summary(
-                new_cases,
-                high_score_cases,
-                deadline_warning_cases,
-            )
-            await self.telegram_bot.send_message(message)
+        # Send via Telegram if available
+        if self.telegram_bot:
+            try:
+                message = self.formatter.format_batch_summary(
+                    new_cases,
+                    high_score_cases,
+                    deadline_warning_cases,
+                )
+                result = await self.telegram_bot.send_message(message)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "telegram_batch_summary_failed",
+                    error=str(e),
+                )
 
+        # Send via Slack if available
+        if self.slack_bot:
+            try:
+                result = await self.slack_notifier.notify_batch_summary(
+                    new_cases,
+                    high_score_cases,
+                    deadline_warning_cases,
+                )
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "slack_batch_summary_failed",
+                    error=str(e),
+                )
+
+        if results:
             logger.info(
                 "batch_summary_sent",
                 new_cases=new_cases,
                 high_score_cases=high_score_cases,
                 deadline_warning_cases=deadline_warning_cases,
+                channels=len(results),
             )
-            return True
-
-        except Exception as e:
-            logger.error(
-                "batch_summary_failed",
-                error=str(e),
-            )
-            return False
+            return any(results)
+        return False
 
     async def notify_case_alert(
         self,
@@ -309,57 +366,96 @@ class NotificationService:
         Returns:
             True if notification sent successfully
         """
-        if not self.telegram_bot:
-            return False
+        results = []
 
-        try:
-            message = self.formatter.format_case_alert(case, threshold_exceeded=True)
-            if payload and "message_suffix" in payload:
-                message += f"\n\n<i>{payload['message_suffix']}</i>"
+        # Send via Telegram if available
+        if self.telegram_bot:
+            try:
+                message = self.formatter.format_case_alert(case, threshold_exceeded=True)
+                if payload and "message_suffix" in payload:
+                    message += f"\n\n<i>{payload['message_suffix']}</i>"
 
-            await self.telegram_bot.send_message(message)
+                result = await self.telegram_bot.send_message(message)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "telegram_case_alert_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
 
+        # Send via Slack if available
+        if self.slack_bot:
+            try:
+                result = await self.slack_notifier.notify_case_alert(case, alert_type, payload)
+                results.append(result)
+            except Exception as e:
+                logger.error(
+                    "slack_case_alert_failed",
+                    case_id=str(case.id),
+                    error=str(e),
+                )
+
+        if results:
             logger.info(
                 "case_alert_sent",
                 case_id=str(case.id),
                 alert_type=alert_type,
+                channels=len(results),
             )
-            return True
-
-        except Exception as e:
-            logger.error(
-                "case_alert_failed",
-                case_id=str(case.id),
-                error=str(e),
-            )
-            return False
+            return any(results)
+        return False
 
     async def close(self) -> None:
         """Close notification service and cleanup resources."""
         if self.telegram_bot:
             await self.telegram_bot.close()
+        if self.slack_bot:
+            self.slack_bot.close()
 
 
 def get_notification_service() -> NotificationService:
-    """Factory function to create NotificationService with configured Telegram bot.
+    """Factory function to create NotificationService with configured Telegram and Slack bots.
 
     Returns:
-        Configured NotificationService instance, or mock if bot not configured
+        Configured NotificationService instance with available notification channels
 
     Note:
-        Reads TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID from settings.
-        Returns a disabled service if tokens are not set.
+        Reads from settings:
+        - TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID for Telegram
+        - SLACK_BOT_TOKEN and SLACK_CHANNEL_ID for Slack
+        Returns a service with available channels, or a disabled service if none configured.
     """
-    bot_token = getattr(settings, "TELEGRAM_BOT_TOKEN", None)
-    chat_id = getattr(settings, "TELEGRAM_CHAT_ID", None)
+    telegram_bot = None
+    slack_bot = None
 
-    if not bot_token or not chat_id:
-        logger.warning("telegram_not_configured, notifications disabled")
-        return NotificationService(telegram_bot=None)
+    # Initialize Telegram if configured
+    telegram_token = getattr(settings, "TELEGRAM_BOT_TOKEN", None)
+    telegram_chat_id = getattr(settings, "TELEGRAM_CHAT_ID", None)
 
-    try:
-        telegram_bot = TelegramBotClient(bot_token, chat_id)
-        return NotificationService(telegram_bot=telegram_bot)
-    except Exception as e:
-        logger.error("failed_to_initialize_telegram_bot", error=str(e))
-        return NotificationService(telegram_bot=None)
+    if telegram_token and telegram_chat_id:
+        try:
+            telegram_bot = TelegramBotClient(telegram_token, telegram_chat_id)
+            logger.info("telegram_bot_initialized")
+        except Exception as e:
+            logger.error("failed_to_initialize_telegram_bot", error=str(e))
+    else:
+        logger.debug("telegram_not_configured")
+
+    # Initialize Slack if configured
+    slack_token = getattr(settings, "SLACK_BOT_TOKEN", None)
+    slack_channel_id = getattr(settings, "SLACK_CHANNEL_ID", None)
+
+    if slack_token and slack_channel_id:
+        try:
+            slack_bot = SlackBotClient(slack_token, slack_channel_id)
+            logger.info("slack_bot_initialized")
+        except Exception as e:
+            logger.error("failed_to_initialize_slack_bot", error=str(e))
+    else:
+        logger.debug("slack_not_configured")
+
+    if not telegram_bot and not slack_bot:
+        logger.warning("no_notification_channels_configured, notifications disabled")
+
+    return NotificationService(telegram_bot=telegram_bot, slack_bot=slack_bot)

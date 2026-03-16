@@ -31,8 +31,6 @@ from app.core.logging import setup_logging
 from app.models.case import Case
 from app.models.case_card import CaseCard
 from app.services.case_card_service import CaseCardService
-from app.services.llm.factory import get_llm_provider
-from app.services.reading.reading_service import ReadingService
 
 if TYPE_CHECKING:
     pass

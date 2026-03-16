@@ -8,7 +8,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.case import Case
@@ -124,7 +123,6 @@ class CaseCardService:
         if not card:
             raise ValueError(f"CaseCard {card_id} not found")
 
-        case_id = card.case_id
         await self.db.delete(card)
         await self.db.commit()
 

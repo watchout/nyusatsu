@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC
 from decimal import Decimal
 from statistics import mean, median, stdev
 from typing import Any
@@ -221,7 +222,7 @@ class PriceAnalyzer:
         Returns:
             PriceHistory instance
         """
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         # Calculate price_difference_rate if needed
         price_diff_rate = None
@@ -273,7 +274,7 @@ class PriceAnalyzer:
             ),
             price_difference_rate=price_diff_rate,
             data_source=price_data.get("data_source", "import"),
-            recorded_at=price_data.get("recorded_at", datetime.now(timezone.utc)),
+            recorded_at=price_data.get("recorded_at", datetime.now(UTC)),
             confidence_score=price_data.get("confidence_score", 80),
             raw_data=price_data.get("raw_data"),
         )

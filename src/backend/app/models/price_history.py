@@ -1,9 +1,6 @@
 """PriceHistory ORM model for F-005 price analysis."""
 
-from decimal import Decimal
-from typing import Optional
-
-from sqlalchemy import Column, Integer, Numeric, String, Text
+from sqlalchemy import Column, Integer, Numeric, String
 from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin

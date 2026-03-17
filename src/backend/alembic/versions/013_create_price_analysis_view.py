@@ -5,8 +5,8 @@ Revises: 012_create_price_history_and_successful_bids
 Create Date: 2026-03-16 18:07:00.000000
 
 """
+
 from alembic import op
-import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = "013_create_price_analysis_view"

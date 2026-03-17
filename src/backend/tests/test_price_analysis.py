@@ -1,13 +1,12 @@
 """Tests for price analysis service (F-005)."""
 
-import pytest
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
-from sqlalchemy import select
+import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Case, PriceHistory
+from app.models import Case
 from app.models.price_history import SuccessfulBids
 from app.services.price_analysis import PriceAnalyzer
 
@@ -22,7 +21,7 @@ async def sample_case(db: AsyncSession) -> Case:
         issuing_org="テスト市",
         category="建築",
         region="東京都",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=10),
+        submission_deadline=datetime.now(UTC) + timedelta(days=10),
     )
     db.add(case)
     await db.flush()
@@ -35,7 +34,7 @@ async def sample_price_histories(
 ) -> list[SuccessfulBids]:
     """Create sample price history records."""
     histories = []
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     for i in range(5):
         bid_date = now - timedelta(days=i * 30)
@@ -128,7 +127,7 @@ async def test_import_price_data(db: AsyncSession, sample_case: Case) -> None:
         "winning_bid": 9500000,
         "total_bids": 5,
         "unique_bidders": 5,
-        "recorded_at": datetime.now(timezone.utc),
+        "recorded_at": datetime.now(UTC),
     }
 
     history = await analyzer.import_price_data(sample_case.id, price_data)
@@ -151,7 +150,7 @@ async def test_competitive_level_detection(
             case_id=sample_case.id,
             final_price=Decimal("9500000"),
             number_of_bidders=15,
-            bid_date=datetime.now(timezone.utc) - timedelta(days=i),
+            bid_date=datetime.now(UTC) - timedelta(days=i),
             source="test",
         )
         db.add(history)
@@ -176,7 +175,7 @@ async def test_price_trend_detection(
             case_id=sample_case.id,
             final_price=Decimal(str(price)),
             number_of_bidders=5,
-            bid_date=datetime.now(timezone.utc) - timedelta(days=i),
+            bid_date=datetime.now(UTC) - timedelta(days=i),
             source="test",
         )
         db.add(history)

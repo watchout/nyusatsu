@@ -5,9 +5,10 @@ Revises: 011_seed_company_profile
 Create Date: 2026-03-16 18:06:00.000000
 
 """
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "012_create_price_history_and_successful_bids"

@@ -2,18 +2,17 @@
 """Historical price data import — F-005."""
 
 import asyncio
-import json
 import logging
-from datetime import datetime, timedelta, timezone
+
+# Setup path for imports
+import sys
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-
-# Setup path for imports
-import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -45,7 +44,7 @@ async def import_sample_price_data(session: AsyncSession) -> None:
     for case in cases:
         # Generate sample price data for last 6 months
         for days_ago in [30, 60, 90, 120, 150, 180]:
-            recorded_at = datetime.now(timezone.utc) - timedelta(days=days_ago)
+            recorded_at = datetime.now(UTC) - timedelta(days=days_ago)
 
             # Deterministic sample prices based on case
             base_price = hash(case.id) % 5000000 + 1000000

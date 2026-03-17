@@ -1,8 +1,10 @@
 """Tests for notification services."""
 
-import pytest
 from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
+from app.services.notifications.telegram_bot import TelegramBotClient
 
 from app.models.case import Case
 from app.services.notifications.notification_service import (
@@ -10,7 +12,6 @@ from app.services.notifications.notification_service import (
     NotificationService,
     get_notification_service,
 )
-from app.services.notifications.telegram_bot import TelegramBotClient
 
 
 class TestNotificationFormatter:
@@ -374,7 +375,7 @@ class TestGetNotificationService:
                 NotificationService,
                 "__init__",
                 return_value=None,
-            ) as mock_init:
+            ) as _:
                 service = get_notification_service()
                 # Service should be created
                 assert service is not None

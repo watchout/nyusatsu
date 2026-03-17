@@ -1,7 +1,8 @@
 """Tests for Slack bot client."""
 
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
 from slack_sdk.errors import SlackApiError
 
 from app.services.notifications.slack_bot import SlackBotClient, validate_bot_credentials

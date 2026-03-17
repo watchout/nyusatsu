@@ -1,17 +1,18 @@
 """Tests for notification hooks integration."""
 
-import pytest
 from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 
+import pytest
+
 from app.models.case import Case
-from app.services.notifications.notification_service import NotificationService
 from app.services.notifications.notification_hooks import (
     check_deadline_warning,
     notify_on_case_scored,
     notify_on_deadline_check,
     notify_on_lifecycle_transition,
 )
+from app.services.notifications.notification_service import NotificationService
 
 
 class TestNotificationHooks:

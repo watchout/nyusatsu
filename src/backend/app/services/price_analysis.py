@@ -1,12 +1,11 @@
 """Price analysis service for F-005 (Price Analysis)."""
 
+from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Optional
-from datetime import datetime, timezone
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import PriceHistory, Case
+from app.models import PriceHistory
 
 
 class PriceAnalyzer:
@@ -19,11 +18,11 @@ class PriceAnalyzer:
     async def analyze_case_price(
         self,
         case_id: str,
-        budgeted_price: Optional[Decimal] = None,
-        winning_bid: Optional[Decimal] = None,
-        lowest_bid: Optional[Decimal] = None,
-        estimated_price: Optional[Decimal] = None,
-        total_bids: Optional[int] = None,
+        budgeted_price: Decimal | None = None,
+        winning_bid: Decimal | None = None,
+        lowest_bid: Decimal | None = None,
+        estimated_price: Decimal | None = None,
+        total_bids: int | None = None,
         data_source: str = "manual",
     ) -> PriceHistory:
         """Analyze price data for a case and store the result.
@@ -60,7 +59,7 @@ class PriceAnalyzer:
             bid_rate=bid_rate,
             price_difference_rate=price_difference_rate,
             data_source=data_source,
-            recorded_at=datetime.now(timezone.utc),
+            recorded_at=datetime.now(UTC),
             confidence_score=confidence_score,
         )
 
@@ -69,9 +68,9 @@ class PriceAnalyzer:
 
         return price_history
 
-    async def get_latest_price_for_case(self, case_id: str) -> Optional[PriceHistory]:
+    async def get_latest_price_for_case(self, case_id: str) -> PriceHistory | None:
         """Retrieve the latest price history for a case."""
-        from sqlalchemy import select, desc
+        from sqlalchemy import desc, select
 
         stmt = (
             select(PriceHistory)
@@ -85,7 +84,7 @@ class PriceAnalyzer:
 
     async def calculate_bid_statistics(self, case_id: str) -> dict:
         """Calculate bidding statistics for a case."""
-        from sqlalchemy import func
+        from sqlalchemy import select
 
         # Get all price records for the case
         stmt = select(PriceHistory).filter(PriceHistory.case_id == case_id)

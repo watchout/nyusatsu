@@ -2,7 +2,7 @@
 
 import logging
 from pathlib import Path
-from typing import Optional
+
 import pdfplumber
 
 logger = logging.getLogger(__name__)
@@ -59,7 +59,7 @@ class PDFParser:
         """Check if PDF is currently open."""
         return self.pdf is not None
 
-    def get_page(self, page_num: int) -> Optional[object]:
+    def get_page(self, page_num: int) -> object | None:
         """Get a specific page from the PDF.
         
         Args:

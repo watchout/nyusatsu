@@ -1,10 +1,9 @@
 """Tests for price analysis service (F-005)."""
 
-import pytest
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
-from sqlalchemy import select
+import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Case, PriceHistory
@@ -21,7 +20,7 @@ async def sample_case(session: AsyncSession) -> Case:
         issuing_org="テスト市",
         category="建築",
         region="東京都",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=10),
+        submission_deadline=datetime.now(UTC) + timedelta(days=10),
     )
     session.add(case)
     await session.flush()
@@ -34,7 +33,7 @@ async def sample_price_histories(
 ) -> list[PriceHistory]:
     """Create sample price history records."""
     histories = []
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     for i in range(5):
         recorded_at = now - timedelta(days=i * 30)
@@ -129,7 +128,7 @@ async def test_import_price_data(session: AsyncSession, sample_case: Case) -> No
         "winning_bid": 9500000,
         "total_bids": 5,
         "unique_bidders": 5,
-        "recorded_at": datetime.now(timezone.utc),
+        "recorded_at": datetime.now(UTC),
     }
 
     history = await analyzer.import_price_data(sample_case.id, price_data)
@@ -153,7 +152,7 @@ async def test_competitive_level_detection(
             case_id=sample_case.id,
             winning_bid=Decimal("9500000"),
             total_bids=15,
-            recorded_at=datetime.now(timezone.utc) - timedelta(days=i),
+            recorded_at=datetime.now(UTC) - timedelta(days=i),
         )
         session.add(history)
 
@@ -177,7 +176,7 @@ async def test_price_trend_detection(
             case_id=sample_case.id,
             winning_bid=Decimal(str(price)),
             total_bids=5,
-            recorded_at=datetime.now(timezone.utc) - timedelta(days=i),
+            recorded_at=datetime.now(UTC) - timedelta(days=i),
         )
         session.add(history)
 

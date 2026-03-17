@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
-import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services.price_analysis import PriceAnalyzer
@@ -167,12 +166,11 @@ class ScoringV2:
                 bonus = min(bonus + 20, 100)
 
         # Government-issued (more reliable)
-        if case.issuing_org:
-            if any(
-                keyword in case.issuing_org
-                for keyword in ["国", "都道府県", "市区町村"]
-            ):
-                bonus = min(bonus + 15, 100)
+        if case.issuing_org and any(
+            keyword in case.issuing_org
+            for keyword in ["国", "都道府県", "市区町村"]
+        ):
+            bonus = min(bonus + 15, 100)
 
         return bonus
 

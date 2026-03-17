@@ -1,9 +1,9 @@
 """Tests for scoring algorithm v2 (F-005)."""
 
-import pytest
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
+import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Case, PriceHistory
@@ -20,8 +20,8 @@ async def sample_case_for_scoring(session: AsyncSession) -> Case:
         issuing_org="テスト市役所",
         category="建築",
         region="東京都",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=15),
-        opening_date=datetime.now(timezone.utc) - timedelta(days=5),
+        submission_deadline=datetime.now(UTC) + timedelta(days=15),
+        opening_date=datetime.now(UTC) - timedelta(days=5),
     )
     session.add(case)
     await session.flush()
@@ -42,7 +42,7 @@ async def case_with_price_data(
             budgeted_price=Decimal("10000000"),
             winning_bid=Decimal(f"{9500000 + i * 100000}"),
             total_bids=5 + i,
-            recorded_at=datetime.now(timezone.utc) - timedelta(days=i * 30),
+            recorded_at=datetime.now(UTC) - timedelta(days=i * 30),
             confidence_score=85,
         )
         session.add(history)
@@ -68,7 +68,7 @@ async def test_deadline_score_calculation() -> None:
         source_id="deadline_test",
         case_name="期限テスト",
         issuing_org="テスト",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=20),
+        submission_deadline=datetime.now(UTC) + timedelta(days=20),
     )
 
     scorer = ScoringV2(None)  # type: ignore
@@ -85,7 +85,7 @@ async def test_deadline_score_near_deadline() -> None:
         source_id="deadline_test_2",
         case_name="期限テスト2",
         issuing_org="テスト",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=2),
+        submission_deadline=datetime.now(UTC) + timedelta(days=2),
     )
 
     scorer = ScoringV2(None)  # type: ignore
@@ -130,8 +130,8 @@ async def test_bonus_score_government_issued() -> None:
         source_id="bonus_test",
         case_name="国発注案件",
         issuing_org="国土交通省",
-        submission_deadline=datetime.now(timezone.utc) + timedelta(days=30),
-        opening_date=datetime.now(timezone.utc) - timedelta(days=5),
+        submission_deadline=datetime.now(UTC) + timedelta(days=30),
+        opening_date=datetime.now(UTC) - timedelta(days=5),
     )
 
     bonus = scorer._calculate_bonus_score(case)
@@ -168,7 +168,7 @@ async def test_comprehensive_score_high_quality(
     """Test that good cases get high scores."""
     # Adjust case for good score
     case_with_price_data.submission_deadline = (
-        datetime.now(timezone.utc) + timedelta(days=20)
+        datetime.now(UTC) + timedelta(days=20)
     )
     case_with_price_data.category = "建築"
     case_with_price_data.issuing_org = "国土交通省"

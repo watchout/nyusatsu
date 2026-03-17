@@ -1,8 +1,9 @@
 """Tests for Slack notifier with Block Kit formatting."""
 
+from datetime import UTC, datetime, timedelta
+from unittest.mock import MagicMock
+
 import pytest
-from datetime import datetime, UTC, timedelta
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
 from app.models.case import Case
 from app.services.notifications.slack_notifier import SlackNotifier

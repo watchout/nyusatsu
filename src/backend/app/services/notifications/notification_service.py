@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 import structlog
+from app.services.external.telegram import TelegramBotClient
 
 from app.core.config import settings
 from app.models.case import Case

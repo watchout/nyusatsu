@@ -3,8 +3,9 @@
 from datetime import UTC, datetime
 from decimal import Decimal
 from statistics import median, stdev
+from uuid import uuid4
 
-from sqlalchemy import desc, func, select
+from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import PriceHistory
@@ -181,6 +182,7 @@ class PriceAnalyzer:
 
         # Create price history record
         price_history = PriceHistory(
+            id=uuid4(),
             case_id=case_id,
             budgeted_price=Decimal(str(budgeted_price)) if budgeted_price else None,
             winning_bid=Decimal(str(winning_bid)) if winning_bid else None,

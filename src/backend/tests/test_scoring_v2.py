@@ -2,6 +2,7 @@
 
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
+from uuid import uuid4
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,6 +39,7 @@ async def case_with_price_data(
     # Add 5 price records
     for i in range(5):
         history = PriceHistory(
+            id=uuid4(),
             case_id=str(case.id),
             budgeted_price=Decimal("10000000"),
             winning_bid=Decimal(f"{9500000 + i * 100000}"),

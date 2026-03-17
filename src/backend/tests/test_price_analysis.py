@@ -2,6 +2,7 @@
 
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
+from uuid import uuid4
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,6 +39,7 @@ async def sample_price_histories(
     for i in range(5):
         recorded_at = now - timedelta(days=i * 30)
         history = PriceHistory(
+            id=uuid4(),
             case_id=str(sample_case.id),
             budgeted_price=Decimal("10000000"),
             winning_bid=Decimal(f"{9500000 + i * 100000}"),
@@ -149,6 +151,7 @@ async def test_competitive_level_detection(
     # High competition (many bids)
     for i in range(5):
         history = PriceHistory(
+            id=uuid4(),
             case_id=str(sample_case.id),
             winning_bid=Decimal("9500000"),
             total_bids=15,
@@ -174,6 +177,7 @@ async def test_price_trend_detection(
     base_prices = [9000000, 9200000, 9400000, 9600000, 9800000]
     for i, price in enumerate(base_prices):
         history = PriceHistory(
+            id=uuid4(),
             case_id=str(sample_case.id),
             winning_bid=Decimal(str(price)),
             total_bids=5,

@@ -1,10 +1,11 @@
 """Tests for PDF Parser service."""
 
-import pytest
 from pathlib import Path
-from io import BytesIO
-from reportlab.pdfgen import canvas
+
 from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
+import pytest
 
 from app.services.pdf_parser import PDFParser, TextExtractor
 from app.services.pdf_parser.extractor import PageContent

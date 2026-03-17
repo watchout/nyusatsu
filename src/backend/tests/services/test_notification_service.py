@@ -1,8 +1,9 @@
 """Tests for notification services."""
 
-import pytest
 from datetime import UTC, datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from app.models.case import Case
 from app.services.notifications.notification_service import (
@@ -319,7 +320,7 @@ class TestGetNotificationService:
                 NotificationService,
                 "__init__",
                 return_value=None,
-            ) as mock_init:
+            ):
                 service = get_notification_service()
                 # Service should be created
                 assert service is not None

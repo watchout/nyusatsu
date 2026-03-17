@@ -1,8 +1,8 @@
 """Text Extraction - PDF text and metadata extraction."""
 
 import logging
-from typing import Optional, Dict, List
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ class TextExtractor:
             return ""
 
     @staticmethod
-    def extract_tables(page) -> List[List[List[str]]]:
+    def extract_tables(page) -> list[list[list[str]]]:
         """Extract tables from a page.
         
         Args:
@@ -93,7 +93,7 @@ class TextExtractor:
             return []
 
     @staticmethod
-    def extract_page_metadata(page) -> Dict:
+    def extract_page_metadata(page) -> dict[str, Any]:
         """Extract metadata from a page.
         
         Args:
@@ -136,7 +136,7 @@ class TextExtractor:
         )
 
     @staticmethod
-    def split_pages(pages: list) -> Dict[int, PageContent]:
+    def split_pages(pages: list) -> dict[int, PageContent]:
         """Split and extract content from multiple pages.
         
         Args:

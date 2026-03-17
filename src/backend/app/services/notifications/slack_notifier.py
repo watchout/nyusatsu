@@ -82,7 +82,6 @@ class SlackNotifier:
             List of Slack Block Kit block dictionaries
         """
         score_emoji = SlackNotifier._get_score_emoji(case.score)
-        score_color = SlackNotifier._get_score_color(case.score)
 
         deadline_str = "未定"
         days_left = "不明"
@@ -176,7 +175,6 @@ class SlackNotifier:
         Returns:
             List of Slack Block Kit block dictionaries
         """
-        score_color = SlackNotifier._get_score_color(case.score)
         urgency = SlackNotifier._get_urgency_level(case.score)
 
         deadline_str = "未定"
@@ -196,7 +194,14 @@ class SlackNotifier:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"*案件名:* `{case.case_name}`\n*スコア:* `{case.score}/100` ({urgency})\n*発注元:* {case.issuing_org}\n*期限:* {deadline_str}\n*カテゴリ:* {case.category or '未分類'}\n\n即対応を推奨します！",
+                    "text": (
+                        f"*案件名:* `{case.case_name}`\n"
+                        f"*スコア:* `{case.score}/100` ({urgency})\n"
+                        f"*発注元:* {case.issuing_org}\n"
+                        f"*期限:* {deadline_str}\n"
+                        f"*カテゴリ:* {case.category or '未分類'}\n\n"
+                        f"即対応を推奨します！"
+                    ),
                 },
             },
         ]
@@ -235,7 +240,6 @@ class SlackNotifier:
         """
         is_urgent = days_left <= 3
         urgency_emoji = "🚨" if is_urgent else "⚠️"
-        urgency_text = "緊急" if is_urgent else "注意"
 
         deadline_str = "未定"
         if case.submission_deadline:
@@ -254,7 +258,14 @@ class SlackNotifier:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"*案件:* `{case.case_name}`\n*残り日数:* *{days_left}日*\n*期限:* {deadline_str}\n*発注元:* {case.issuing_org}\n*スコア:* {case.score}/100\n\n急いで対応してください！",
+                    "text": (
+                        f"*案件:* `{case.case_name}`\n"
+                        f"*残り日数:* *{days_left}日*\n"
+                        f"*期限:* {deadline_str}\n"
+                        f"*発注元:* {case.issuing_org}\n"
+                        f"*スコア:* {case.score}/100\n\n"
+                        f"急いで対応してください！"
+                    ),
                 },
             },
         ]
@@ -309,7 +320,13 @@ class SlackNotifier:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"📊 *処理サマリ:*\n• 新規案件: *{new_cases}*件\n• 高スコア案件: *{high_score_cases}*件\n• 期限間近案件: *{deadline_warning_cases}*件\n\n詳細はダッシュボードをご確認ください。",
+                    "text": (
+                        f"📊 *処理サマリ:*\n"
+                        f"• 新規案件: *{new_cases}*件\n"
+                        f"• 高スコア案件: *{high_score_cases}*件\n"
+                        f"• 期限間近案件: *{deadline_warning_cases}*件\n\n"
+                        f"詳細はダッシュボードをご確認ください。"
+                    ),
                 },
             },
         ]

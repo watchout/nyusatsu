@@ -54,6 +54,12 @@ async def db(engine):
 
 
 @pytest.fixture
+async def session(db):
+    """Alias for db fixture (for compatibility with tests)."""
+    return db
+
+
+@pytest.fixture
 async def client(db):
     """Async HTTP client with DB session override."""
     app = create_app()

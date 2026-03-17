@@ -138,7 +138,7 @@ async def test_import_price_data(session: AsyncSession, sample_case: Case) -> No
     assert history.case_id == str(sample_case.id)
     assert history.budgeted_price == Decimal("10000000")
     assert history.winning_bid == Decimal("9500000")
-    assert history.price_difference_rate == Decimal("-5.00")
+    assert history.price_difference_rate == 5.0  # (10000000 - 9500000) / 10000000 * 100 = 5.0
 
 
 @pytest.mark.asyncio

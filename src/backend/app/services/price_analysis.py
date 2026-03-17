@@ -135,9 +135,11 @@ class PriceAnalyzer:
         # Detect price trend
         price_trend = "安定"  # stable
         if len(recent_bids) >= 2:
-            if recent_bids[0] > recent_bids[-1] * 1.02:
+            latest = Decimal(str(recent_bids[0]))
+            earliest = Decimal(str(recent_bids[-1]))
+            if latest > earliest * Decimal("1.02"):
                 price_trend = "低下"  # decreasing
-            elif recent_bids[0] < recent_bids[-1] * 0.98:
+            elif latest < earliest * Decimal("0.98"):
                 price_trend = "上昇"  # increasing
 
         # Calculate confidence (based on number of records)
@@ -146,11 +148,11 @@ class PriceAnalyzer:
         # Calculate price score (100 = most favorable)
         price_score = 50
         if records:
-            avg_bid_rate = sum(
-                r.bid_rate or 0 for r in records if r.bid_rate is not None
-            ) / len([r for r in records if r.bid_rate is not None])
-            # Lower bid rate = better price (higher score)
-            price_score = max(0, min(100, int(100 - avg_bid_rate)))
+            bid_rates = [float(r.bid_rate) for r in records if r.bid_rate is not None]
+            if bid_rates:
+                avg_bid_rate = sum(bid_rates) / len(bid_rates)
+                # Lower bid rate = better price (higher score)
+                price_score = max(0, min(100, int(100 - avg_bid_rate)))
 
         return {
             "recent_winning_bids": [float(b) for b in recent_bids[:5]],
@@ -175,9 +177,11 @@ class PriceAnalyzer:
         confidence_score = 75  # Default confidence
 
         if winning_bid and budgeted_price and budgeted_price != 0:
-            bid_rate = float((Decimal(winning_bid) / Decimal(budgeted_price)) * 100)
+            bid_decimal = Decimal(str(winning_bid))
+            budget_decimal = Decimal(str(budgeted_price))
+            bid_rate = float((bid_decimal / budget_decimal) * 100)
             price_difference_rate = float(
-                ((Decimal(budgeted_price) - Decimal(winning_bid)) / Decimal(budgeted_price)) * 100
+                ((budget_decimal - bid_decimal) / budget_decimal) * 100
             )
 
         # Create price history record

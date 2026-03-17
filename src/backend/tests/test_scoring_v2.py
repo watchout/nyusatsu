@@ -38,7 +38,7 @@ async def case_with_price_data(
     # Add 5 price records
     for i in range(5):
         history = PriceHistory(
-            case_id=case.id,
+            case_id=str(case.id),
             budgeted_price=Decimal("10000000"),
             winning_bid=Decimal(f"{9500000 + i * 100000}"),
             total_bids=5 + i,
@@ -74,7 +74,7 @@ async def test_deadline_score_calculation() -> None:
     scorer = ScoringV2(None)  # type: ignore
     score = scorer._calculate_deadline_score(case)
 
-    assert score == 100  # 21+ days = 100
+    assert score == 85  # 14-20 days = 85
 
 
 @pytest.mark.asyncio

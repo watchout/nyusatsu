@@ -65,7 +65,7 @@ class ScoringV2:
 
         # 2. Price score (40%)
         price_analysis = await self.price_analyzer.analyze_price_for_case(
-            case.id, category=case.category
+            str(case.id), category=case.category
         )
         price_score = price_analysis.get("price_score", 50)
         scores["price_score"] = price_score

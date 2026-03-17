@@ -1,7 +1,7 @@
-"""Add price_history table for F-005.
+"""Add price_history and successful_bids tables for F-005.
 
-Revision ID: 005_add_price_history
-Revises: 
+Revision ID: 012
+Revises: 011
 Create Date: 2026-03-16 17:45:00.000000
 
 """
@@ -11,8 +11,8 @@ from sqlalchemy.dialects import postgresql
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "005_add_price_history"
-down_revision = None
+revision = "012"
+down_revision = "011"
 branch_labels = None
 depends_on = None
 

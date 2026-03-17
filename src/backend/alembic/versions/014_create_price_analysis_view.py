@@ -1,7 +1,7 @@
 """Create price_analysis view for F-005 analytics.
 
-Revision ID: 013_create_price_analysis_view
-Revises: 012_create_price_history_and_successful_bids
+Revision ID: 014
+Revises: 013
 Create Date: 2026-03-16 18:07:00.000000
 
 """
@@ -9,8 +9,8 @@ Create Date: 2026-03-16 18:07:00.000000
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "013_create_price_analysis_view"
-down_revision = "012_create_price_history_and_successful_bids"
+revision = "014"
+down_revision = "013"
 branch_labels = None
 depends_on = None
 

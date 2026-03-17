@@ -4,7 +4,6 @@ from datetime import UTC, datetime
 from typing import Any
 
 import structlog
-from app.services.notifications.telegram_bot import TelegramBotClient
 
 from app.core.config import settings
 from app.models.case import Case
@@ -161,7 +160,7 @@ class NotificationService:
 
     def __init__(
         self,
-        telegram_bot: TelegramBotClient | None = None,
+        telegram_bot: Any | None = None,
         score_threshold: int = DEFAULT_SCORE_THRESHOLD,
     ):
         """Initialize notification service.

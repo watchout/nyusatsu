@@ -1,7 +1,7 @@
 """Create price_history and successful_bids tables for F-005.
 
-Revision ID: 012_create_price_history_and_successful_bids
-Revises: 011_seed_company_profile
+Revision ID: 013
+Revises: 012
 Create Date: 2026-03-16 18:06:00.000000
 
 """
@@ -11,8 +11,8 @@ from sqlalchemy.dialects import postgresql
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "012_create_price_history_and_successful_bids"
-down_revision = "011_seed_company_profile"
+revision = "013"
+down_revision = "012"
 branch_labels = None
 depends_on = None
 
@@ -23,7 +23,7 @@ def upgrade() -> None:
     op.create_table(
         "price_history",
         sa.Column("id", postgresql.UUID(as_uuid=True), server_default=sa.text("gen_random_uuid()"), nullable=False),
-        sa.Column("case_id", sa.String(36), nullable=False),
+        sa.Column("case_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("asking_price", sa.Numeric(15, 2), nullable=True),
         sa.Column("estimated_price", sa.Numeric(15, 2), nullable=True),
         sa.Column("lowest_bid", sa.Numeric(15, 2), nullable=True),
@@ -48,7 +48,7 @@ def upgrade() -> None:
     op.create_table(
         "successful_bids",
         sa.Column("id", postgresql.UUID(as_uuid=True), server_default=sa.text("gen_random_uuid()"), nullable=False),
-        sa.Column("case_id", sa.String(36), nullable=False),
+        sa.Column("case_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("final_price", sa.Numeric(15, 2), nullable=False),
         sa.Column("number_of_bidders", sa.Integer(), nullable=True),
         sa.Column("winning_company", sa.String(255), nullable=True),

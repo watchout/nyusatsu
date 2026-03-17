@@ -10,6 +10,7 @@ from app.models.case_event import CaseEvent
 from app.models.checklist import Checklist
 from app.models.company_profile import CompanyProfile
 from app.models.eligibility_result import EligibilityResult
+from app.models.price_history import PriceHistory
 
 __all__ = [
     "Base",
@@ -25,4 +26,5 @@ __all__ = [
     "CompanyProfile",
     "EligibilityResult",
     "LifecycleStage",
+    "PriceHistory",
 ]

@@ -7,6 +7,8 @@ after the test, keeping the DB schema intact but data isolated.
 
 from __future__ import annotations
 
+import contextlib
+
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
@@ -43,13 +45,11 @@ async def _delete_all_tables(conn) -> None:
         'company_profiles',  # Clear to reinsert seed data
     ]
     for table in tables_to_clear:
-        try:
+        with contextlib.suppress(Exception):
             await conn.execute(text(f'DELETE FROM {table} CASCADE'))
-        except Exception:
-            pass  # Table might not exist, that's ok
     
     # Re-insert seed data (SSOT-4 §7-3)
-    try:
+    with contextlib.suppress(Exception):
         await conn.execute(text("""
             INSERT INTO company_profiles (
                 unified_qualification, grade, business_categories, regions,
@@ -69,8 +69,6 @@ async def _delete_all_tables(conn) -> None:
                 ]'::JSONB
             )
         """))
-    except Exception:
-        pass  # Seed insert may fail if table doesn't exist yet
 
 
 @pytest.fixture

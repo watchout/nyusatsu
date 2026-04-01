@@ -3,6 +3,7 @@
  *
  * Phase1: React Context is sufficient. Phase2: migrate to Zustand if needed.
  */
+/* eslint-disable react-refresh/only-export-components */
 
 import {
   createContext,

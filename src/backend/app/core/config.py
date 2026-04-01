@@ -46,5 +46,13 @@ class Settings(BaseSettings):
     # --- Cost control ---
     LLM_DAILY_TOKEN_LIMIT: int = 0
 
+    # --- Telegram notifications ---
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
+
+    # --- Slack notifications ---
+    SLACK_BOT_TOKEN: str = ""
+    SLACK_CHANNEL_ID: str = ""
+
 
 settings = Settings()

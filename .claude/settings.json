@@ -21,6 +21,28 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat /Users/yuji/Developer/nyusatsu/nyusatsu-dev-state.md 2>/dev/null || echo 'No state file found. Run fetch_messages to restore context.'"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[PreCompact] Update nyusatsu-dev-state.md before compaction completes.'"
+          }
+        ]
+      }
     ]
   }
 }

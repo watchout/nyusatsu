@@ -37,3 +37,4 @@ logs/*
 .framework/audits/
 .framework/feedback/
 docs/audits/
+.mcp.json

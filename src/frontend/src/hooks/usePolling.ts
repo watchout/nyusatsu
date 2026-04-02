@@ -30,7 +30,10 @@ export function usePolling(
 ): void {
   const { intervalMs, enabled = true } = options;
   const callbackRef = useRef(callback);
-  callbackRef.current = callback;
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     if (!enabled || intervalMs <= 0) return;
